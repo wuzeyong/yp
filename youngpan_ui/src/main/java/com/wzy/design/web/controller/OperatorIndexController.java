@@ -44,15 +44,16 @@ public class OperatorIndexController extends BaseController{
     private FileInfoService fileInfoService;
     
     @RequestMapping("index.do")
-    public ModelAndView index() {
+    public ModelAndView index(Integer id) {
     	Long count = fileInfoService.queryByUserName(getCurrentUserName());
     	OperatorModelAndView omv = new OperatorModelAndView(count > 0 ? INDEX : UPLOAD);
+    	
         return omv;
     }
     
     @ResponseBody
     @RequestMapping("list.do")
-    public JQGridPage<?> list(int page, int rows) {
+    public JQGridPage<?> list(Integer id,int page, int rows) {
         rows = rows <= 0 ? DEFAULT_PAGE_SIZE : rows;
         Page<FileInfo> pager = fileInfoService.query(getCurrentUserName(), (page - 1) * rows, rows);
         return JQGridPage.create(pager);

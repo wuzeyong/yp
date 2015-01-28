@@ -1,6 +1,7 @@
 package com.wzy.design.web.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import com.wzy.design.entity.FileInfo;
 import com.wzy.design.entity.User;
 import com.wzy.design.web.support.ControllerContext;
 import com.wzy.design.web.support.DatePropertyEditor;
@@ -52,4 +54,21 @@ public class BaseController {
         }
     }
     
+    @SuppressWarnings("unchecked")
+	protected Object  getObjectFromSession(String attribute){
+    	Object object = (HashMap<String, FileInfo>) ControllerContext.getSession().getAttribute(attribute);
+    	return object;
+    }
+    
+    protected void bindAttributeToSession(HttpServletRequest httpServletRequest, String attribute,Object object){
+    	HttpSession session = httpServletRequest.getSession(true);
+        session.setAttribute(attribute, object);
+    }
+    
+    protected void unbindAttributeToSession(HttpServletRequest httpServletRequest,String attribute){
+    	HttpSession session = httpServletRequest.getSession();
+        if(session != null){
+            session.removeAttribute(attribute);
+        }
+    }
 }

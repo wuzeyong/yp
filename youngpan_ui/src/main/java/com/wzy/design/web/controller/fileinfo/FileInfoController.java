@@ -40,7 +40,7 @@ public class FileInfoController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("upload.do")
 	public String upload(MultipartFile file, HttpServletRequest request){
-		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) ControllerContext.getSession().getAttribute(WebConstants.SESSION_FILES);
+		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) getObjectFromSession(WebConstants.SESSION_FILES);
 		if(filesInSession == null){
 			filesInSession= new HashMap<String,FileInfo>();
 		}
@@ -50,31 +50,35 @@ public class FileInfoController extends BaseController {
 		fileInfo.setUserName(getCurrentUserName());
 		fileInfo.setContentType(file.getContentType());
 		filesInSession.put(fileInfo.getFileName(), fileInfo);
-		request.getSession().setAttribute(WebConstants.SESSION_FILES, filesInSession);
+		bindAttributeToSession(request, WebConstants.SESSION_FILES, filesInSession);
 		return SUCCESS_VIEW;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("cancel.do")
 	public String cancel(String fileName,HttpServletRequest request){
-		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) ControllerContext.getSession().getAttribute(WebConstants.SESSION_FILES);
+		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) getObjectFromSession(WebConstants.SESSION_FILES);
 		if(filesInSession != null){
 			filesInSession.remove(fileName);
-			request.getSession().setAttribute(WebConstants.SESSION_FILES, filesInSession);
+			bindAttributeToSession(request, WebConstants.SESSION_FILES, filesInSession);
 		}
 		return SUCCESS_VIEW;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping("cancelAll.do")
 	public String cancelAll(HttpServletRequest request){
-		request.getSession().removeAttribute(WebConstants.SESSION_FILES);
+		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) getObjectFromSession(WebConstants.SESSION_FILES);
+		if(filesInSession != null){
+			unbindAttributeToSession(request, WebConstants.SESSION_FILES);
+		}
 		return SUCCESS_VIEW;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping("uploadAll.do")
 	public String uploadAll(HttpServletRequest request){
-		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) ControllerContext.getSession().getAttribute(WebConstants.SESSION_FILES);
+		HashMap<String, FileInfo> filesInSession = (HashMap<String, FileInfo>) getObjectFromSession(WebConstants.SESSION_FILES);
 		if(filesInSession != null){
 			fileInfoService.uploadAll(filesInSession);
 		}

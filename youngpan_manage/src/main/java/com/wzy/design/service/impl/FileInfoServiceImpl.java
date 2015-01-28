@@ -112,5 +112,6 @@ public class FileInfoServiceImpl implements FileInfoService {
 
 	@Override
 	public void uploadAll(HashMap<String, FileInfo> filesInSession) {
+		
 	}
 }

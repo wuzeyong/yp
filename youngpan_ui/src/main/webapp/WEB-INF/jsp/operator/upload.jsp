@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <div class="ftm-grid-searcher">
 	<form  class="form-inline" enctype="multipart/form-data">
 		<div class="ftm-search-field ">
@@ -37,8 +38,16 @@
 		</p>
 	</form>
 </div>
+<c:if test="${param.fileBread eq 'true'}" var="fileBread"/>
 <script type="text/javascript">
 	yp.constant.CONTEXT_PATH = "${contextPath}";
+	var fileId = ${file.id};
+	var fileBread = ${fileBread};
+	if(fileBread){
+		ftm.Template.breadcrumbs = ["currentFile","${currentFile.fileName}"]
+	}else{
+		ftm.Template.breadcrumbs = ["preFile",{url:'indexByNode.do?id=${preFile.id}',name:'${preFile.fileName}'},"${currentFile.fileName}"]
+	}
 	jQuery(function($) { 
 		new yp.operator.FileSubmitForm();
 	});

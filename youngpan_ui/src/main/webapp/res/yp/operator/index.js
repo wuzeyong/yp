@@ -84,7 +84,7 @@ yp.common.FileGrid = yp.Core.extend({
 		var self = this;
 		//column of name
 		this.gridOptions.colModel[2].formatter = function(colValue,options,rowObject){
-			var href = "detailView.do?id=" + rowObject.id + "&fileBread=true";
+			var href = "index.do?id=" + rowObject.id + "&fileBread=true";
 			return '<a href="' + href + '" >'+colValue+'</a>';
 		};
 	},
