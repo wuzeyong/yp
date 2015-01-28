@@ -1,0 +1,50 @@
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoder 默认配置为PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<!-- <if condition='isNull("catalina.base") || isDefined("wtp.deploy")'>
+		<then>
+			<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+				encoder 默认配置为PatternLayoutEncoder
+				<encoder>
+					<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+					</pattern>
+				</encoder>
+			</appender>
+		</then>
+		<else>
+			<appender name="STDOUT"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>${catalina.base}/logs/sip.log</file>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					daily rollover
+					<fileNamePattern>${catalina.base}/logs/sip-%d.log</fileNamePattern>
+					<maxHistory>7</maxHistory>
+				</rollingPolicy>
+				<encoder>
+					<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+					</pattern>
+				</encoder>
+			</appender>
+		</else>
+	</if> -->
+
+	<!-- logback为java中的包 -->
+	<logger name="logback" />
+	<!--logback.LogbackDemo：类的全路径 -->
+	<logger name="org.springframework" level="TRACE" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="com.apusic.ft" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT"></appender-ref>
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>

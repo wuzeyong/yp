@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.wzy.design.entity">
+	<class name="FileInfo" table="yp_fileinfo">
+		<id name="id" column="id" type="integer">
+			<generator class="native"></generator>
+		</id>
+		<property name="lastModify" column="c_last_modify" type="timestamp"  not-null="true"></property>
+		<property name="fileName" column="c_file_name" type="string" length="255"
+			not-null="true" ></property>
+		<property name="pathInside" column="c_path_inside" type="string"
+			length="255" not-null="true"></property>
+		<property name="fileSize" column="c_file_size" type="long"></property>
+		<property name="contentType" column="c_content_type" type="string" length="255" not-null="true" ></property>
+		<property name="fileType" column="c_file_type" not-null="true">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.wzy.design.base.FileType</param>
+				<param name="useNamed">true</param>
+			</type>
+		</property>
+		<property name="userName" column="c_user_name" type="string"
+			length="64" not-null="true"></property>
+		<property name="origin" column="c_origin" type="boolean" not-null="true" ></property>
+	</class>
+</hibernate-mapping>

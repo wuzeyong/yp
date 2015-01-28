@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.wzy.design.entity">
+	<class name="FilePath" table="yp_filepath">
+		<id name="id" column="id" type="integer">
+			<generator class="native"></generator>
+		</id>
+		<property name="lastModify" column="c_last_modify" type="timestamp"  not-null="true"></property>
+		<many-to-one name="ancestor" lazy="false"  class="com.wzy.design.entity.FileInfo" column="ancestor"/>
+		<many-to-one name="descendant" lazy="false"   class="com.wzy.design.entity.FileInfo" column="descendant"/>
+		
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,154 @@
+@CHARSET "UTF-8";
+body {
+	background-color: white !important;
+	border-width: 0px;
+}
+
+/***override the jqueryUI,bootstrap,....style***/
+.widget-main {
+	border-width: 0px !important;
+}
+
+.widget-body {
+	border-width: 0px !important;
+}
+
+.widget-box {
+	border-width: 0px !important;
+}
+/***for hide jqueryui dialog**/
+.ftm-dialog-hidden{
+    z-index: 1030 !important;
+}
+
+/***for the boot box:improve the z-index value bigger than jqueryui specify**/
+.modal{
+	z-index:1060;
+}
+.modal-backdrop{
+	z-index:1055; 
+}
+
+/******for ftm grid searcher*******/
+
+.ftm-grid-searcher{
+	float:left;
+	width:100%;
+	padding:5px 0 0 0;
+	background-color: #EFF3F8 !important;
+    border-top: 1px solid #E1E1E1 !important;
+    border-bottom: 1px solid #E1E1E1 !important;
+}
+.ftm-grid-searcher .ftm-search-field{
+	width:120px;
+	display: inline-block;
+	margin-bottom: 5px;
+	margin-left:5px;
+}
+.ftm-grid-searcher .form-inline{
+	line-height: 25px;
+}
+
+.ftm-grid-searcher .ftm-select{
+	margin-top: -5px;
+}
+
+.ftm-grid-searcher select{
+	width:163px;
+	vertical-align: middle;
+	height:34px;
+}
+
+.ftm-grid-searcher label{
+	width:90px;
+	text-align: right;
+}
+
+.ftm-grid-nav{
+	width: 100%;
+	float:left;
+	margin: 5px 0 5px 0;
+}
+
+.ftm-inner-label{
+	margin-right: 10px;
+}
+
+.chosen-container-multi .chosen-choices li.search-field input[type="text"]{
+	height: 30px !important;
+}
+
+.ui-icon.disabled{
+	color:#ABBAC3 !important;
+	border-corlor:#ABBAC3 !important;
+}    
+
+
+/*****************************************/
+.ftm-width-10{
+    width: 10% !important;
+}
+.ftm-width-fix-30{
+    width: 30px !important;
+}
+/******************for ftm-field-group***********************/
+.ftm-field-group.has-error{
+    color: #D68273;
+}
+
+.ftm-field-group.has-error select,.ftm-field-group.has-error input,.ftm-field-group.has-error textarea{
+	color: #866;
+	border-color: #DB8978;
+}
+
+/********************for task manager**************************************/
+.selectedDir{
+	margin-top: 3px;
+	line-height: 25px;
+}
+.selectedDir .ftm-inner-label{
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: middle;
+}
+/********************for file Type**************************************/
+.pdf{
+	background: url("image/pdf.png") no-repeat;
+	height:20px;
+}
+.doc{
+	background: url("image/doc.png") no-repeat;
+	height:20px;
+}
+.film{
+	background: url("image/film.png") no-repeat;
+	height:20px;
+}
+.music{
+	background: url("image/music.png") no-repeat;
+	height:20px;
+}
+.notype{
+	background: url("image/notype.png") no-repeat;
+	height:20px;
+}
+.picture{
+	background: url("image/picture.png") no-repeat;
+	height:20px;
+}
+.ppt{
+	background: url("image/ppt.png") no-repeat;
+	height:20px;
+}
+.txt{
+	background: url("image/txt.png") no-repeat;
+	height:20px;
+}
+.xml{
+	background: url("image/xml.png") no-repeat;
+	height:20px;
+}
+.xsl{
+	background: url("image/xsl.png") no-repeat;
+	height:20px;
+}

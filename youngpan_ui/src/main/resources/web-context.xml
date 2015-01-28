@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="  
+    http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd  
+    ">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.wzy.design" />
+
+	<mvc:resources mapping="/css/**" location="/css/"
+		cache-period="31556926" />
+	<mvc:resources mapping="/images/**" location="/images/"
+		cache-period="31556926" />
+	<mvc:resources mapping="/javascript/**" location="/javascript/"
+		cache-period="31556926" />
+
+	<mvc:annotation-driven />
+
+	<bean class="com.wzy.design.web.support.MessageViewResolver">
+		<property name="cache" value="false"></property>
+		<property name="prefix" value="/WEB-INF/jsp/message/" />
+		<property name="suffix" value=".jsp" />
+		<property name="order" value="0"></property>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="messageViewNames">
+			<set>
+				<value>success</value>
+				<value>fail</value>
+				<value>403</value>
+			</set>
+		</property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="order" value="1"></property>
+	</bean>
+	
+	<!-- SpringMVC上传文件时，需要配置MultipartResolver处理器 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <property name="defaultEncoding" value="UTF-8"/>  
+        <!-- 指定所上传文件的总大小不能超过200KB。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 -->  
+        <!-- <property name="maxUploadSize" value="200000"/>   -->
+    </bean>  
+
+	<bean id="exceptionResolver" class="com.wzy.design.web.support.SipMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.wzy.design.web.support.AccessDeniedException">403</prop>
+				<prop key="java.lang.Throwable">fail</prop>
+			</props>
+		</property>
+
+		<property name="defaultErrorView">
+			<value>fail</value>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.util.Date" value="com.wzy.design.web.support.DatePropertyEditor" />
+			</map>
+		</property>
+	</bean>
+	
+
+	
+</beans>

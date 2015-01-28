@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.wzy.design.entity">
+	<class name="User" table="yp_user">
+		<id name="id" column="id" type="integer">
+			<generator class="native"></generator>
+		</id>
+		<property name="lastModify" column="c_last_modify" type="timestamp"  not-null="true"></property>
+		<property name="name" column="c_name" type="string" length="64"
+			not-null="true" unique="true"></property>
+		<property name="realName" column="c_real_name" type="string"
+			length="64" not-null="true"></property>
+		<property name="password" column="c_password" type="string"
+			length="64" not-null="true"></property>
+		<property name="email" column="c_email" type="string"
+			length="64"></property>
+		<property name="mobile" column="c_mobile" type="string"
+			length="32"></property>
+		<property name="state" column="c_state" not-null="true">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.wzy.design.base.UserState</param>
+				<param name="useNamed">true</param>
+			</type>
+		</property>
+		<property name="role" column="c_role" not-null="true">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.wzy.design.base.Role</param>
+				<param name="useNamed">true</param>
+			</type>
+		</property>
+		<property name="stateDesc" column="c_state_desc" type="string"
+			length="64"></property>
+		<property name="passwordValidDate" column="c_passwrod_valid_date"
+			type="timestamp"></property>
+		<property name="passwordRetries" column="c_password_retries"
+			type="integer"></property>
+	</class>
+</hibernate-mapping>
