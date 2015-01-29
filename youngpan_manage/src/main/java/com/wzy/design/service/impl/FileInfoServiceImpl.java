@@ -8,17 +8,20 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wzy.design.entity.FileInfo;
+import com.wzy.design.entity.FilePath;
 import com.wzy.design.service.FileInfoService;
 import com.wzy.design.service.FilePathService;
 import com.wzy.design.support.CriteriaCreator;
-import com.wzy.design.support.YPManageException;
 import com.wzy.design.support.Page;
+import com.wzy.design.support.YPManageException;
 import com.wzy.design.util.QueryUtil;
 
 
@@ -42,6 +45,7 @@ public class FileInfoServiceImpl implements FileInfoService {
         if(StringUtils.isNotBlank(userName)){
             criteria.add(Restrictions.eq("userName", userName));
         }
+        criteria.add(Restrictions.eq("origin", true));
         if(count){
         	criteria.setProjection(Projections.count("id"));
         }else{
@@ -114,4 +118,49 @@ public class FileInfoServiceImpl implements FileInfoService {
 	public void uploadAll(HashMap<String, FileInfo> filesInSession) {
 		
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FileInfo> queryAncestorByDescendant(Integer id) {
+		final Session session = sessionFactory.getCurrentSession();
+		final FileInfo descendant = get(id);
+		List<FileInfo> ancestors =session.createCriteria(FilePath.class)
+				.setProjection(Projections.property( "ancestor"))
+				.add(Restrictions.eq("descendant", descendant))
+				.addOrder(Order.desc("id"))
+				.list();
+		ancestors.remove(descendant);
+		return ancestors;
+	}
+
+	@Override
+	public Page<FileInfo> query(Integer id, int start, int limit) {
+		
+		final Session session = sessionFactory.getCurrentSession();
+		final FileInfo ancestor = get(id);
+		 Page<FileInfo> page = QueryUtil.createPageByCriteria(new CriteriaCreator() {
+				@Override
+				public Criteria create(boolean count) {
+					return createQuery(ancestor,count,session);
+				}
+			}, start, limit);
+	       return page;
+	}
+
+	protected Criteria createQuery(FileInfo ancestor, boolean count,
+			Session session) {
+		Criteria criteria = session.createCriteria(FilePath.class)
+				.setProjection(Projections.groupProperty( "descendant"));
+        if(ancestor != null){
+            criteria.add(Restrictions.eq("ancestor", ancestor));
+        }
+        if(count){
+        	criteria.setProjection(Projections.count("id"));
+        }else{
+        	criteria.addOrder(Order.desc("id"));
+        }
+        return criteria;
+	}
+
+	
 }

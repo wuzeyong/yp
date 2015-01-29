@@ -1,12 +1,20 @@
 yp.common = yp.operator || {};
 
 yp.common.FileGrid = yp.Core.extend({
+	id:null,
 	constructor : function(config){
 		$.extend(this,config)
 		this.prepareGridOptions();
 		this.prepareGridOptionsType();
 		this.operate  = yp.utils.createDelegate(this.operate,this);
 		this.actionGrid = new yp.ActionGrid(this);
+		var pager = this.actionGrid.pagerEL;
+		var page= $(pager).find("input.ui-pg-input").val();
+		var rows  = $(pager).find("select.ui-pg-selbox").val();
+		var tmpPostData = this.actionGrid.gridOptions.postData;
+		var extraPostData = {id:id,rows:rows,page:page};
+		tmpPostData = $.extend({},this.actionGrid.gridOptions.postData,extraPostData);
+		this.actionGrid.gridOptions.postData = tmpPostData;
 	},
 	gridEL:"#grid-table",
 	pagerEL:"#grid-pager",
@@ -85,7 +93,7 @@ yp.common.FileGrid = yp.Core.extend({
 		//column of name
 		this.gridOptions.colModel[2].formatter = function(colValue,options,rowObject){
 			var href = "index.do?id=" + rowObject.id + "&fileBread=true";
-			return '<a href="' + href + '" >'+colValue+'</a>';
+			return '<a  href="' + href + '" >'+colValue+'</a>';
 		};
 	},
 	prepareGridOptionsType : function(){

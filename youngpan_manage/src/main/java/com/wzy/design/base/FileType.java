@@ -2,7 +2,7 @@ package com.wzy.design.base;
 
 public enum FileType {
 	
-	PDF("pdf"),DOC("doc");
+	PDF("pdf"),DOC("doc"),DIR("dir");
 	private String type;
 	
 	 FileType(){}

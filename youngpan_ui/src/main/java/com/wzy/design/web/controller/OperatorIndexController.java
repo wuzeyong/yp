@@ -47,7 +47,12 @@ public class OperatorIndexController extends BaseController{
     public ModelAndView index(Integer id) {
     	Long count = fileInfoService.queryByUserName(getCurrentUserName());
     	OperatorModelAndView omv = new OperatorModelAndView(count > 0 ? INDEX : UPLOAD);
-    	
+    	if(id != null){
+    		FileInfo current = fileInfoService.get(id);
+    		List<FileInfo> ancestors = fileInfoService.queryAncestorByDescendant(id);
+    		omv.addObject("ancestors", ancestors);
+    		omv.addObject("current", current);
+    	}
         return omv;
     }
     
@@ -55,8 +60,12 @@ public class OperatorIndexController extends BaseController{
     @RequestMapping("list.do")
     public JQGridPage<?> list(Integer id,int page, int rows) {
         rows = rows <= 0 ? DEFAULT_PAGE_SIZE : rows;
-        Page<FileInfo> pager = fileInfoService.query(getCurrentUserName(), (page - 1) * rows, rows);
-        return JQGridPage.create(pager);
+        if(id == null){
+        	Page<FileInfo> pager = fileInfoService.query(getCurrentUserName(), (page - 1) * rows, rows);
+        	return JQGridPage.create(pager);
+        }
+        Page<FileInfo> pager = fileInfoService.query(id, (page - 1) * rows, rows);
+    	return JQGridPage.create(pager);
     }
 
 }
