@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.wzy.design.entity.FileInfo;
 import com.wzy.design.service.FileInfoService;
 import com.wzy.design.web.controller.BaseController;
-import com.wzy.design.web.support.ControllerContext;
 import com.wzy.design.web.support.WebConstants;
 
 @Controller
@@ -21,9 +21,19 @@ import com.wzy.design.web.support.WebConstants;
 @RequestMapping("/operator/fileinfo/")
 public class FileInfoController extends BaseController {
 	
-	
+	private static final String JSP_PRIX = "operator/";
+    
+    private static final String UPLOAD_VIEW = JSP_PRIX + "upload";
+    
 	@Autowired
 	private FileInfoService fileInfoService;
+	
+	@RequestMapping("uploadView.do")
+    public ModelAndView createResetPasswordView() {
+        ModelAndView mv = new ModelAndView(UPLOAD_VIEW);
+        mv.addObject("isPage", false);
+        return mv;
+    }
 	
 	@RequestMapping("updateFileName.do")
 	public String update(int id ,String fileName){

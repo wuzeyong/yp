@@ -40,7 +40,7 @@
                 open : function() {
                     self.trigger('onOpen');
                 },
-                modal : true
+                modal : false
             });
             
             this._dialog = $(setting.el).dialog(dialogOptions);

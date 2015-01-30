@@ -153,6 +153,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 				.setProjection(Projections.groupProperty( "descendant"));
         if(ancestor != null){
             criteria.add(Restrictions.eq("ancestor", ancestor));
+            criteria.add(Restrictions.ne("descendant", ancestor));
         }
         if(count){
         	criteria.setProjection(Projections.count("id"));
@@ -161,6 +162,4 @@ public class FileInfoServiceImpl implements FileInfoService {
         }
         return criteria;
 	}
-
-	
 }

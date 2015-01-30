@@ -8,13 +8,7 @@ yp.common.FileGrid = yp.Core.extend({
 		this.prepareGridOptionsType();
 		this.operate  = yp.utils.createDelegate(this.operate,this);
 		this.actionGrid = new yp.ActionGrid(this);
-		var pager = this.actionGrid.pagerEL;
-		var page= $(pager).find("input.ui-pg-input").val();
-		var rows  = $(pager).find("select.ui-pg-selbox").val();
-		var tmpPostData = this.actionGrid.gridOptions.postData;
-		var extraPostData = {id:id,rows:rows,page:page};
-		tmpPostData = $.extend({},this.actionGrid.gridOptions.postData,extraPostData);
-		this.actionGrid.gridOptions.postData = tmpPostData;
+		this.aTagClickEvent();
 	},
 	gridEL:"#grid-table",
 	pagerEL:"#grid-pager",
@@ -63,8 +57,9 @@ yp.common.FileGrid = yp.Core.extend({
 	rename:function(rowId,rowData){
 		//获取a标签中的值
 		var fileNameText = rowData.fileName;
-		var reg = "(<a\.*>)(\.*)(</a>)";
+		var reg = "(<a\.*>)(\.*)(<input\.*></a>)";
 		var fileName = fileNameText.match(reg)[2];
+		console.log(fileName);
 		$("tr[id=" + rowId
 				+ "] td[aria-describedby='grid-table_fileName']")
 				.replaceWith(
@@ -88,14 +83,31 @@ yp.common.FileGrid = yp.Core.extend({
 			},
 		});
 	},
+	
+	aTagClickEvent:function(){
+		try{
+			var gridTable = $(this.gridEL);
+			var aTag = gridTable.find("td > a");
+			aTag.click(function(){
+				var aTagValue = aTag.find("input[name='id']").val();
+				$("#yp-search-form > input[name='id']").val(aTagValue);
+				$('.yp-search').trigger("click");
+			});
+		
+		}catch(e){
+			console.log(e);
+		}
+		
+	},
+	
 	prepareGridOptions : function(){
 		var self = this;
 		//column of name
 		this.gridOptions.colModel[2].formatter = function(colValue,options,rowObject){
-			var href = "index.do?id=" + rowObject.id + "&fileBread=true";
-			return '<a  href="' + href + '" >'+colValue+'</a>';
+			return '<a href="javascript:void(0)"  >'+colValue+'<input type="hidden" name="id" value="'+rowObject.id+'"/></a>';
 		};
 	},
+	
 	prepareGridOptionsType : function(){
 		var self = this;
 		//column of fileType
@@ -104,3 +116,20 @@ yp.common.FileGrid = yp.Core.extend({
 		};
 	}
 });
+
+yp.common.Upload = yp.Core.extend({
+	
+	constructor : function(config){
+		$.extend(this,config);
+		var dialog=new yp.AjaxValidationDialog({
+			el : "#upload-editor",
+			modal : false,
+			title : "上传文件",
+			url:yp.constant.CONTEXT_PATH + "operator/fileinfo/uploadView.do",
+			submitUrl:yp.constant.CONTEXT_PATH + "operator/fileinfo/uploadAll.do",
+			width : 500,
+			height:400,
+		});
+		dialog.open();
+	},
+}); 

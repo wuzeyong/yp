@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div  class="yp-grid-searcher">
 	<div class="yp-search-field ">
-			<input type="file" id="file" name="file" style="display:none"> 
+			<!-- <input type="file" id="file" name="file" style="display:none">  -->
 			<button class="btn btn-primary upload-icon ace-icon" id="upload"><i class="icon-cloud-upload bigger-125"></i>上传文件</button>
 	</div>
 	<div class="yp-search-field">
@@ -11,7 +11,10 @@
 </div>
 <div id="yp-grid-searcher" class="yp-grid-searcher">
 	<form id="yp-search-form" class="form-inline" enctype="multipart/form-data">
-		<input type="hidden" name="id" value="${current.id}" />	
+		<input type="hidden" name="id" />
+		<div class="form-group yp-search-field" style="text-align:center; display:none;">
+				<button class="btn btn-primary btn-xs yp-search"></button>
+		</div>	
 	</form>	
 </div>
 			
@@ -21,7 +24,9 @@
 <table id="grid-table"></table>
 <div id="grid-pager"></div>
 <div id="dialog"></div>
+<div id="upload-editor"></div>
 
+<script src="${contextPath}res/assets/js/dropzone.min.js"></script>
 <script src="${contextPath}res/yp/operator/index.js?v=${v}"></script>
 <script type="text/javascript">
 	yp.constant.CONTEXT_PATH = "${contextPath}";
@@ -41,7 +46,10 @@
 	jQuery(function($) { 
 		new yp.common.FileGrid({id:id});
 	});
-	$("#upload").click(function(){
+	/* $("#upload").click(function(){
 		$("#file").click();
+	}); */
+	$("#upload").click(function(){
+		new yp.common.Upload();
 	});
 </script>

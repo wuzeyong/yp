@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<div class="yp-grid-searcher">
-	<form  class="form-inline" enctype="multipart/form-data">
-		<div class="yp-search-field ">
-			<input type="file" id="file" name="file" style="display:none"> 
-			<button class="btn btn-primary upload-icon ace-icon" id="upload"><i class="icon-cloud-upload bigger-125"></i>上传文件</button>
-		</div>
-		<div class="yp-search-field">
-			<button class="btn btn-default"><i class="icon-folder-open bigger-125"></i>新建文件</button>
-		</div>		
-	</form>	
-</div>
+<c:if test="${isPage}">
+	<div class="yp-grid-searcher">
+		<form  class="form-inline" enctype="multipart/form-data">
+			<div class="yp-search-field ">
+				<input type="file" id="file" name="file" style="display:none"> 
+				<button class="btn btn-primary upload-icon ace-icon" id="upload"><i class="icon-cloud-upload bigger-125"></i>上传文件</button>
+			</div>
+			<div class="yp-search-field">
+				<button class="btn btn-default"><i class="icon-folder-open bigger-125"></i>新建文件</button>
+			</div>		
+		</form>	
+	</div>
+</c:if>
 <div  id="yp-grid-searcher" class="yp-grid-searcher">
     <form id="dropzone" class="dropzone dz-clickable" action="fileinfo/upload.do">
         <div class="dz-default dz-message">
@@ -30,6 +32,7 @@
         </div>
     </form>
 </div>
+<c:if test="${isPage}">
 <div id="submit-file" class="yp-grid-searcher">
 	<form class="form-inline" enctype="multipart/form-data">
 		<p id="buttons">
@@ -38,17 +41,21 @@
 		</p>
 	</form>
 </div>
+</c:if>
 <c:if test="${param.fileBread eq 'true'}" var="fileBread"/>
 <script type="text/javascript">
-	yp.constant.CONTEXT_PATH = "${contextPath}";
-	var fileId = ${file.id};
-	var fileBread = ${fileBread};
-	if(fileBread){
-		yp.Template.breadcrumbs = ["currentFile","${currentFile.fileName}"]
-	}else{
-		yp.Template.breadcrumbs = ["preFile",{url:'indexByNode.do?id=${preFile.id}',name:'${preFile.fileName}'},"${currentFile.fileName}"]
+	var isPage='${isPage}';
+	if(page){
+		yp.constant.CONTEXT_PATH = "${contextPath}";
+		var fileId = ${file.id};
+		var fileBread = ${fileBread};
+		if(fileBread){
+			yp.Template.breadcrumbs = ["currentFile","${currentFile.fileName}"]
+		}else{
+			yp.Template.breadcrumbs = ["preFile",{url:'indexByNode.do?id=${preFile.id}',name:'${preFile.fileName}'},"${currentFile.fileName}"]
+		}
+		jQuery(function($) { 
+			new yp.operator.FileSubmitForm();
+		});
 	}
-	jQuery(function($) { 
-		new yp.operator.FileSubmitForm();
-	});
 </script>
