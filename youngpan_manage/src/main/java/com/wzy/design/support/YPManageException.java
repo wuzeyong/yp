@@ -32,6 +32,8 @@ public class YPManageException extends RuntimeException {
 
     public static final int REFERENCED = 7;
 
+	public static final int NO_FILES = 8;
+
     public YPManageException() {
         super();
     }

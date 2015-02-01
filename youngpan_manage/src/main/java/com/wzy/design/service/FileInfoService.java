@@ -20,4 +20,11 @@ public interface FileInfoService {
 	public Long queryByUserName(String currentUserName);
 
 	public void uploadAll(HashMap<String, FileInfo> filesInSession);
+
+
+	public Page<FileInfo> query(Integer id, int limit, int rows);
+
+	public List<FileInfo> queryAncestorByDescendant(Integer id);
+
+	public List<FileInfo> queryDescendantByAncestor(Integer id);
 }

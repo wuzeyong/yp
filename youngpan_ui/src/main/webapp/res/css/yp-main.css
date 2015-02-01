@@ -17,7 +17,7 @@ body {
 	border-width: 0px !important;
 }
 /***for hide jqueryui dialog**/
-.ftm-dialog-hidden{
+.yp-dialog-hidden{
     z-index: 1030 !important;
 }
 
@@ -29,9 +29,9 @@ body {
 	z-index:1055; 
 }
 
-/******for ftm grid searcher*******/
+/******for yp grid searcher*******/
 
-.ftm-grid-searcher{
+.yp-grid-searcher{
 	float:left;
 	width:100%;
 	padding:5px 0 0 0;
@@ -39,38 +39,38 @@ body {
     border-top: 1px solid #E1E1E1 !important;
     border-bottom: 1px solid #E1E1E1 !important;
 }
-.ftm-grid-searcher .ftm-search-field{
+.yp-grid-searcher .yp-search-field{
 	width:120px;
 	display: inline-block;
 	margin-bottom: 5px;
 	margin-left:5px;
 }
-.ftm-grid-searcher .form-inline{
+.yp-grid-searcher .form-inline{
 	line-height: 25px;
 }
 
-.ftm-grid-searcher .ftm-select{
+.yp-grid-searcher .yp-select{
 	margin-top: -5px;
 }
 
-.ftm-grid-searcher select{
+.yp-grid-searcher select{
 	width:163px;
 	vertical-align: middle;
 	height:34px;
 }
 
-.ftm-grid-searcher label{
+.yp-grid-searcher label{
 	width:90px;
 	text-align: right;
 }
 
-.ftm-grid-nav{
+.yp-grid-nav{
 	width: 100%;
 	float:left;
 	margin: 5px 0 5px 0;
 }
 
-.ftm-inner-label{
+.yp-inner-label{
 	margin-right: 10px;
 }
 
@@ -85,18 +85,18 @@ body {
 
 
 /*****************************************/
-.ftm-width-10{
+.yp-width-10{
     width: 10% !important;
 }
-.ftm-width-fix-30{
+.yp-width-fix-30{
     width: 30px !important;
 }
-/******************for ftm-field-group***********************/
-.ftm-field-group.has-error{
+/******************for yp-field-group***********************/
+.yp-field-group.has-error{
     color: #D68273;
 }
 
-.ftm-field-group.has-error select,.ftm-field-group.has-error input,.ftm-field-group.has-error textarea{
+.yp-field-group.has-error select,.yp-field-group.has-error input,.yp-field-group.has-error textarea{
 	color: #866;
 	border-color: #DB8978;
 }
@@ -106,7 +106,7 @@ body {
 	margin-top: 3px;
 	line-height: 25px;
 }
-.selectedDir .ftm-inner-label{
+.selectedDir .yp-inner-label{
 	display: inline-block;
 	overflow: hidden;
 	vertical-align: middle;
@@ -150,5 +150,9 @@ body {
 }
 .xsl{
 	background: url("image/xsl.png") no-repeat;
+	height:20px;
+}
+.dir{
+	background: url("image/dir.png") no-repeat;
 	height:20px;
 }

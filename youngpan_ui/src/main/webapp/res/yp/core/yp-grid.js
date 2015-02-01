@@ -9,6 +9,7 @@
 			$.extend(this,tmpConfig);
 			this.init();
 		},
+		extraData:null,
 		gridEL : "",
 		pagerEL : "",
 		gridOptions : {

@@ -76,7 +76,7 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home home-icon"></i>
-								<a href="${contextPath}operator/index.do">首页</a>
+								<a href="${contextPath}operator/index.do">全部文件</a>
 							</li>
 							
 						</ul><!-- .breadcrumb -->
