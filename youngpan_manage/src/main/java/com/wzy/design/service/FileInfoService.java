@@ -26,5 +26,7 @@ public interface FileInfoService {
 
 	public List<FileInfo> queryAncestorByDescendant(Integer id);
 
+
 	public List<FileInfo> queryDescendantByAncestor(Integer id);
+
 }

@@ -6,6 +6,7 @@ yp.common.FileGrid = yp.Core.extend({
 		$.extend(this,config)
 		this.prepareGridOptions();
 		this.prepareGridOptionsType();
+		this.prepareGridPage();
 		this.operate  = yp.utils.createDelegate(this.operate,this);
 		this.actionGrid = new yp.ActionGrid(this);
 		//this.aTagClickEvent();
@@ -98,6 +99,17 @@ yp.common.FileGrid = yp.Core.extend({
 			console.log(e);
 		}
 		
+	},
+	
+	prepareGridPage:function(){
+		var self = this;
+		var pagerEL = this.pagerEL;
+		try{
+			var result = $(".ui-pg-table").find("tr");
+			result.append("<td dir='ltr'><input type='hidden'  value='"+id+"' ></input></td>");
+		}catch(e){
+			console.log(e);
+		}
 	},
 	
 	prepareGridOptions : function(){

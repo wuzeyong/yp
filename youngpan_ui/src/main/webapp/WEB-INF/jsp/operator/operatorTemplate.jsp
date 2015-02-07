@@ -140,6 +140,7 @@
 		<script type="text/javascript">
 			$(function(){
 				yp.Template.init();
+				//new yp.operator.FileSubmitForm();
 			})
 		</script>
 		

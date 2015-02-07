@@ -3,6 +3,7 @@
 <div  class="yp-grid-searcher">
 	<div class="yp-search-field ">
 			<input type="file" id="file" name="file" style="display:none"> 
+			<!-- <input type="file" id="file" name="file" style="display:none">  -->
 			<button class="btn btn-primary upload-icon ace-icon" id="upload"><i class="icon-cloud-upload bigger-125"></i>上传文件</button>
 	</div>
 	<div class="yp-search-field">
@@ -17,14 +18,14 @@
 		</div>	
 	</form>	
 </div>
-							
 <div id="yp-grid-nav" class="yp-grid-nav"></div>
-	
 <div style="clear:both"></div>
 <table id="grid-table"></table>
-<div id="grid-pager"></div>
+<div id="grid-pager">
+	<input type="hidden" name="id" value="${current.id}"/>
+</div>
 <div id="dialog"></div>
-<div id="upload-editor" ></div>
+<div id="upload-editor"></div>
 
 <script src="${contextPath}res/yp/operator/index.js?v=${v}"></script>
 <script src="${contextPath}res/assets/js/dropzone.min.js"></script>

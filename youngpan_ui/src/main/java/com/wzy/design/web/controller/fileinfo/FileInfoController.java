@@ -27,11 +27,10 @@ public class FileInfoController extends BaseController {
     
     private static final String UPLOAD_VIEW = JSP_PRIX + "upload";
     
-    private static final String INDEX_DO = JSP_PRIX + "index.do";
-    
 	@Autowired
 	private FileInfoService fileInfoService;
 	
+
 	@RequestMapping("uploadView.do")
     public ModelAndView createResetPasswordView() {
         ModelAndView mv = new ModelAndView(UPLOAD_VIEW);

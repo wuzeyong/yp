@@ -55,7 +55,4 @@
 			yp.Template.breadcrumbs = ["preFile",{url:'indexByNode.do?id=${preFile.id}',name:'${preFile.fileName}'},"${currentFile.fileName}"]
 		} 
 	}
-	jQuery(function($) { 
-		new yp.operator.FileSubmitForm();
-	});
 </script>

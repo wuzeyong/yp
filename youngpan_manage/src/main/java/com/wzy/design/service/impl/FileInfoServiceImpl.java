@@ -8,10 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -167,9 +165,9 @@ public class FileInfoServiceImpl implements FileInfoService {
 	@Override
 	public List<FileInfo> queryDescendantByAncestor(Integer id) {
 		final Session session = sessionFactory.getCurrentSession();
-		final FileInfo  ancestor = get(id);
+		final FileInfo ancestor = get(id);
 		List<FileInfo> descendants =session.createCriteria(FilePath.class)
-				.setProjection(Projections.property( "descendant"))
+				.setProjection(Projections.property("descendant"))
 				.add(Restrictions.eq("ancestor", ancestor))
 				.addOrder(Order.desc("id"))
 				.list();
@@ -177,5 +175,4 @@ public class FileInfoServiceImpl implements FileInfoService {
 		return descendants;
 	}
 
-	
 }
