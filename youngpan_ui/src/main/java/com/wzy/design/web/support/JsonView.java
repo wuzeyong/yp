@@ -14,7 +14,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 /**

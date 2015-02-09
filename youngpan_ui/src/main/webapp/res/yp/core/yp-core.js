@@ -492,7 +492,9 @@
 		//应用的URL前缀，由页面初始化时赋值
 		URL_PREFIX : '',
 		//应用上下文路径
-		CONTEXT_PATH : ''
+		CONTEXT_PATH : '',
+		//当前文件id
+		CURRENTID:'',
 	};
     
 })("Core", jQuery, this);

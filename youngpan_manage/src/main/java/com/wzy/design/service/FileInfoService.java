@@ -3,7 +3,6 @@ package com.wzy.design.service;
 import java.util.HashMap;
 import java.util.List;
 
-import com.wzy.design.base.Role;
 import com.wzy.design.entity.FileInfo;
 import com.wzy.design.support.Page;
 
@@ -27,6 +26,8 @@ public interface FileInfoService {
 	public List<FileInfo> queryAncestorByDescendant(Integer id);
 
 
-	public List<FileInfo> queryDescendantByAncestor(Integer id);
+	public List<FileInfo> queryDescendantsByAncestor(Integer id);
+
+	public void createDir(Integer id, String fileName, String lastModify,String userName);
 
 }

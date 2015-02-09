@@ -11,6 +11,6 @@
 		<property name="lastModify" column="c_last_modify" type="timestamp"  not-null="true"></property>
 		<many-to-one name="ancestor" lazy="false"  class="com.wzy.design.entity.FileInfo" column="ancestor"/>
 		<many-to-one name="descendant" lazy="false"   class="com.wzy.design.entity.FileInfo" column="descendant"/>
-		
+		<property name="fatherAndSon" column="c_father_son" type="boolean"  not-null="true"></property>
 	</class>
 </hibernate-mapping>

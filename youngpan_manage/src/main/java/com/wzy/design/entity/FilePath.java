@@ -15,6 +15,10 @@ public class FilePath extends AbstractEntity {
 	 * 子孙文件夹及文件
 	 */
 	private FileInfo descendant;
+	/**
+	 * ancestor和descendant是否父子目录
+	 */
+	private boolean fatherAndSon = false;
 	
 	public FileInfo getAncestor() {
 		return ancestor;
@@ -28,4 +32,11 @@ public class FilePath extends AbstractEntity {
 	public void setDescendant(FileInfo descendant) {
 		this.descendant = descendant;
 	}
+	public boolean isFatherAndSon() {
+		return fatherAndSon;
+	}
+	public void setFatherAndSon(boolean fatherAndSon) {
+		this.fatherAndSon = fatherAndSon;
+	}
+	
 }

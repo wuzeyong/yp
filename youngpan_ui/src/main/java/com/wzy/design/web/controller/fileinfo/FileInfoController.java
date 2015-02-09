@@ -1,7 +1,6 @@
 package com.wzy.design.web.controller.fileinfo;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -100,13 +99,10 @@ public class FileInfoController extends BaseController {
 		return SUCCESS_VIEW;
 	}
 	
-	@RequestMapping("check.do")
-	public String check(Integer id){
-		List<FileInfo> descendants = fileInfoService.queryDescendantByAncestor(id);
-	   //ModelAndView mv = new ModelAndView(descendants.size() > 0 ? INDEX_DO:UPLOAD_VIEW);
-	   // mv.addObject("id",id);
-		return "redirect:/operator/index.do?id="+id;
+	@RequestMapping("createDirectory.do")
+	public String creatDirectory(Integer id,String fileName,String lastModify){
+		fileInfoService.createDir(id,fileName,lastModify,getCurrentUserName());
+		return SUCCESS_VIEW;
 	}
-	
 	
 }

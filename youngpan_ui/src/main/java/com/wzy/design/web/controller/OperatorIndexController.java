@@ -44,11 +44,10 @@ public class OperatorIndexController extends BaseController{
     private FileInfoService fileInfoService;
     
     @RequestMapping("index.do")
-    public ModelAndView index(Integer id) {
-    	//Long count = fileInfoService.queryByUserName(getCurrentUserName());
+    public ModelAndView index(Integer id,boolean fileBread) {
     	String url = INDEX;
     	if(id != null){
-    		List<FileInfo> descendants = fileInfoService.queryDescendantByAncestor(id);
+    		List<FileInfo> descendants = fileInfoService.queryDescendantsByAncestor(id);
     		url = descendants.size() > 0 ?INDEX:UPLOAD; 
     	}
     	OperatorModelAndView omv = new OperatorModelAndView(url);
@@ -59,6 +58,7 @@ public class OperatorIndexController extends BaseController{
     		omv.addObject("ancestors", ancestors);
     	}
     	omv.addObject("isPage", true);
+    	omv.addObject("fileBread",fileBread);
         return omv;
     }
     

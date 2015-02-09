@@ -13,6 +13,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wzy.design.base.FileType;
 import com.wzy.design.entity.FileInfo;
 import com.wzy.design.entity.FilePath;
 import com.wzy.design.service.FileInfoService;
@@ -20,11 +21,14 @@ import com.wzy.design.service.FilePathService;
 import com.wzy.design.support.CriteriaCreator;
 import com.wzy.design.support.Page;
 import com.wzy.design.support.YPManageException;
+import com.wzy.design.util.DateUtil;
 import com.wzy.design.util.QueryUtil;
 
 
 @Transactional(rollbackFor = Exception.class)
 public class FileInfoServiceImpl implements FileInfoService {
+	
+	private static final long DIRECTORY_SIZE = 4096;
 	
 	private SessionFactory sessionFactory;
 	
@@ -47,7 +51,7 @@ public class FileInfoServiceImpl implements FileInfoService {
         if(count){
         	criteria.setProjection(Projections.count("id"));
         }else{
-        	criteria.addOrder(Order.desc("id"));
+        	criteria.addOrder(Order.asc("id"));
         }
         return criteria;
     }
@@ -151,28 +155,70 @@ public class FileInfoServiceImpl implements FileInfoService {
 				.setProjection(Projections.groupProperty( "descendant"));
         if(ancestor != null){
             criteria.add(Restrictions.eq("ancestor", ancestor));
-            criteria.add(Restrictions.ne("descendant", ancestor));
+            criteria.add(Restrictions.eq("fatherAndSon", true));
         }
         if(count){
         	criteria.setProjection(Projections.count("id"));
         }else{
-        	criteria.addOrder(Order.desc("id"));
+        	criteria.addOrder(Order.asc("id"));
         }
         return criteria;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FileInfo> queryDescendantByAncestor(Integer id) {
+	public List<FileInfo> queryDescendantsByAncestor(Integer id) {
 		final Session session = sessionFactory.getCurrentSession();
 		final FileInfo ancestor = get(id);
 		List<FileInfo> descendants =session.createCriteria(FilePath.class)
 				.setProjection(Projections.property("descendant"))
 				.add(Restrictions.eq("ancestor", ancestor))
-				.addOrder(Order.desc("id"))
+				.add(Restrictions.eq("fatherAndSon", true))
+				.addOrder(Order.asc("id"))
 				.list();
 		descendants.remove(ancestor);
 		return descendants;
 	}
+
+	@Override
+	public void createDir(Integer id, String fileName, String lastModify,String userName) {
+		Session session = sessionFactory.getCurrentSession();
+		FileInfo fileInfo = new FileInfo();
+		fileInfo.setFileName(fileName);
+		fileInfo.setLastModify(DateUtil.string2Date(lastModify));
+		fileInfo.setContentType("DIR");
+		fileInfo.setDirectory(true);
+		fileInfo.setFileSize(DIRECTORY_SIZE);
+		fileInfo.setFileType(FileType.DIR);
+		if(id == null){
+			fileInfo.setOrigin(true);
+		}
+		fileInfo.setUserName(userName);
+		//TODO：调用hadoopDao将在userName对应空间创建目录，并为fileInfo设置内部路径
+		fileInfo.setPathInside("/aaa/aaa");
+		session.save(fileInfo);
+		List<FileInfo> ancestors = null;
+		if(id != null){
+			ancestors = queryAncestorByDescendant(id);
+			FileInfo parentFile = get(id);
+			FilePath path = new FilePath();
+			path.setAncestor(parentFile);
+			path.setDescendant(fileInfo);
+			path.setFatherAndSon(true);
+			session.save(path);
+		}else{
+			ancestors = new ArrayList<FileInfo>();
+		}
+		ancestors.add(fileInfo);
+		for(FileInfo ancestor:ancestors){
+			FilePath path = new FilePath();
+			path.setAncestor(ancestor);
+			path.setDescendant(fileInfo);
+			path.setFatherAndSon(false);
+			session.save(path);
+		}
+	}
+
+	
 
 }

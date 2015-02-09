@@ -1,9 +1,10 @@
 package com.wzy.design.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.commons.lang.time.DateUtils;
 
 public class DateUtil {
     public static int getFiled(Date date, int field) {
@@ -24,4 +25,14 @@ public class DateUtil {
         return calendar.getTime();
     }
     
+    public static Date string2Date(String str){
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	Date date = null;
+		try {
+			date = sdf.parse(str);
+		} catch (ParseException e) {
+			date = new Date();
+		}
+    	return date;
+    }
 }

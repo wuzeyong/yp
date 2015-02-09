@@ -28,7 +28,7 @@
 			multiselect : true,
 			multiboxonly : true,
 			autowidth : true,
-			emptyrecords : "没有数据"
+			emptyrecords : "没有数据",
 		},
 		init : function(){
 			this.gridSelector = $(this.gridEL);

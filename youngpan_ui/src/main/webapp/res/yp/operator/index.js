@@ -1,15 +1,13 @@
 yp.common = yp.operator || {};
 
 yp.common.FileGrid = yp.Core.extend({
-	id:null,
 	constructor : function(config){
-		$.extend(this,config)
+		$.extend(this,config);
 		this.prepareGridOptions();
 		this.prepareGridOptionsType();
-		this.prepareGridPage();
 		this.operate  = yp.utils.createDelegate(this.operate,this);
+		this.gridOptions.url =this.gridOptions.url+yp.constant.CURRENTID;
 		this.actionGrid = new yp.ActionGrid(this);
-		//this.aTagClickEvent();
 	},
 	gridEL:"#grid-table",
 	pagerEL:"#grid-pager",
@@ -19,7 +17,7 @@ yp.common.FileGrid = yp.Core.extend({
 	navButtons:[yp.buttons.batchDownload,yp.buttons.batchRemove],
 	gridOptions : {
 		caption : "",
-		url : "list.do",
+		url : "list.do?id="+yp.constant.CURRENTID,
 		colNames : ['id','类型','文件名','大小', '修改日期'],
 		colModel : [
 			{name:'id',index:'id', width:20,editable: false,hidden:true},
@@ -58,7 +56,7 @@ yp.common.FileGrid = yp.Core.extend({
 	rename:function(rowId,rowData){
 		//获取a标签中的值
 		var fileNameText = rowData.fileName;
-		var reg = "(<a\.*>)(\.*)(<input\.*></a>)";
+		var reg = "(<a\.*>)(\.*)(</a>)";
 		var fileName = fileNameText.match(reg)[2];
 		console.log(fileName);
 		$("tr[id=" + rowId
@@ -76,7 +74,7 @@ yp.common.FileGrid = yp.Core.extend({
 			submitUrl : yp.constant.CONTEXT_PATH + "operator/fileinfo/updateFileName.do",
 			submitButtonEL : "#submit",
 			cancelButtonEL : "#cancel",
-			successURL:yp.constant.CONTEXT_PATH + "operator/index.do",
+			successURL:yp.constant.CONTEXT_PATH + "operator/index.do?id="+yp.constant.CURRENTID+"&fileBread=true",
 			onCancelClick : function(){
 				$("tr[id=" + rowId
 						+ "] td[aria-describedby='grid-table_fileName']")
@@ -85,40 +83,17 @@ yp.common.FileGrid = yp.Core.extend({
 		});
 	},
 	
-	aTagClickEvent:function(){
-		try{
-			var gridTable = $(this.gridEL);
-			var aTag = gridTable.find("td > a");
-			aTag.click(function(){
-				var aTagValue = aTag.find("input[name='id']").val();
-				$("#yp-search-form > input[name='id']").val(aTagValue);
-				$('.yp-search').trigger("click");
-			});
-		
-		}catch(e){
-			console.log(e);
-		}
-		
-	},
-	
-	prepareGridPage:function(){
-		var self = this;
-		var pagerEL = this.pagerEL;
-		try{
-			var result = $(".ui-pg-table").find("tr");
-			result.append("<td dir='ltr'><input type='hidden'  value='"+id+"' ></input></td>");
-		}catch(e){
-			console.log(e);
-		}
-	},
-	
 	prepareGridOptions : function(){
 		var self = this;
 		//column of name
 		this.gridOptions.colModel[2].formatter = function(colValue,options,rowObject){
-			//return '<a href="javascript:void(0)"  >'+colValue+'<input type="hidden" name="id" value="'+rowObject.id+'"/></a>';
-			var href = "fileinfo/check.do?id=" + rowObject.id ;
-			return '<a  href="' + href + '" >'+colValue+'</a>';
+			var isDirectory = rowObject.directory;
+			if(isDirectory){
+				 var href = "index.do?id=" + rowObject.id+"&fileBread=true";
+				 return '<a  href="' + href + '" >'+colValue+'</a>';
+			}else{
+				 return '<a  href="#">'+colValue+'</a>';
+			}
 		};
 	},
 	
@@ -128,6 +103,54 @@ yp.common.FileGrid = yp.Core.extend({
 		this.gridOptions.colModel[1].formatter = function(colValue,options,rowObject){
 			return '<span class="col-xs-2 ' + colValue + '" ></span>';
 		};
+	},
+	
+	
+	addRowData:function(){
+		var self = this;
+		 var ids = $(self.gridEL).jqGrid('getDataIDs');
+		 //获得当前最大行号（数据编号）
+		 var rowid = Math.max.apply(Math,ids);
+		 //获得新添加行的行号（数据编号）
+		 var newrowid = rowid+1;
+		 console.log(newrowid);
+		 var date = new Date();
+		 format = "yyyy-MM-dd HH:mm:ss";
+		 var lastModify = format.replace("yyyy",date.getFullYear())
+         .replace("MM",date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1))
+         .replace("dd",date.getDate() < 10 ? "0" + (date.getDate()) : (date.getDate()))
+         .replace("HH",date.getHours() < 10 ? "0" + date.getHours() : date.getHours())
+         .replace("mm",date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes())
+         .replace("ss",date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds());
+		 var rowData = [{
+			 id:"",
+			 fileTypeLabel:"dir",
+			 fileName:"<div id='createDir-editor'><form>"
+					+"<input type='hidden' name='id' value='"+yp.constant.CURRENTID+"'/>"
+					+"<input id='fileName' name='fileName'  class='box' type='text' value='' />"
+					+"<input type='hidden' id='lastModify' name='lastModify'   value='"+lastModify+"' />"
+					+"<span id='create'  class='btn   btn-xs badge badge-success' ><i class='icon-ok white'></i></span>"
+					+"<span id='cancel' class='btn  btn-xs badge badge-warning' ><i class='icon-remove  whilt'></i></span></td>"
+					+"</form></div>",
+			 fileSize:"4096",
+			 lastModify:lastModify,
+			 操作:[yp.buttons.download,yp.buttons.move,yp.buttons.rename,yp.buttons.remove],
+		 }];
+		 $(self.gridEL).jqGrid("addRowData", newrowid, rowData, "last");
+		 var ajaxForm = new yp.PageAjaxForm({
+				el : "#createDir-editor",
+				submitUrl : yp.constant.CONTEXT_PATH + "operator/fileinfo/createDirectory.do",
+				submitButtonEL : "#create",
+				cancelButtonEL : "#cancel",
+				successURL:yp.constant.CONTEXT_PATH + "operator/index.do?id="+yp.constant.CURRENTID+"&fileBread=true",
+				onCancelClick : function(){
+					var ids = $(self.gridEL).jqGrid('getDataIDs');
+					var rows = $(self.gridEL).getGridParam("reccount");
+					var rowid = Math.max.apply(Math,ids);
+					$(self.gridEL).jqGrid('delRowData', ids[rows-1]);  
+					$(self.gridEL).trigger("reloadGrid");
+				},
+			});
 	}
 });
 

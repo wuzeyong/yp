@@ -35,8 +35,12 @@ public class FileInfo extends AbstractEntity {
 	/**
 	 * 是否原始文件
 	 */
-	private boolean origin;
+	private boolean origin = false;
 	
+	/**
+	 * 是否目录
+	 */
+	private boolean directory;
 	
 	public String getFileName() {
 		return fileName;
@@ -83,4 +87,11 @@ public class FileInfo extends AbstractEntity {
 	public void setOrigin(boolean origin) {
 		this.origin = origin;
 	}
+	public boolean isDirectory() {
+		return directory;
+	}
+	public void setDirectory(boolean directory) {
+		this.directory = directory;
+	}
+	
 }

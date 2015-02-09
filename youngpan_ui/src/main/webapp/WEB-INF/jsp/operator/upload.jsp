@@ -42,17 +42,22 @@
 	</form>
 </div>
 </c:if>
-<c:if test="${param.fileBread eq 'true'}" var="fileBread"/>
 <script type="text/javascript">
-	var isPage='${isPage}';
-	yp.constant.CONTEXT_PATH = "${contextPath}";
-	if(isPage){
-		 var fileId = '${file.id}';
-		var fileBread = ${fileBread};
-		if(fileBread){
-			yp.Template.breadcrumbs = ["currentFile","${currentFile.fileName}"]
-		}else{
-			yp.Template.breadcrumbs = ["preFile",{url:'indexByNode.do?id=${preFile.id}',name:'${preFile.fileName}'},"${currentFile.fileName}"]
-		} 
+function initBread(){
+	var ancestors = '${ancestors}';
+	var fileBread =  '${fileBread}';
+	if(fileBread){
+		if(ancestors.length > 0){
+			for(var i = 0 ; i < ancestors.length;i++){
+				var id = ancestors[i].id;
+				var fileName = ancestors[i].fileName;
+				yp.Template.breadcrumbs = [{url:'index.do?id='+id+'&fileBread=true',name:fileName}];
+			}
+			yp.Template.breadcrumbs = ['${current.fileName}'];
+		}
+	}else{
+		yp.Template.breadcrumbs = ['${current.fileName}'];
 	}
+}
+initBread();
 </script>

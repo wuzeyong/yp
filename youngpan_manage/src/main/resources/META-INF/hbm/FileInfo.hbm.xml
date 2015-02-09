@@ -24,5 +24,6 @@
 		<property name="userName" column="c_user_name" type="string"
 			length="64" not-null="true"></property>
 		<property name="origin" column="c_origin" type="boolean" not-null="true" ></property>
+		<property name="directory" column="c_directory" type="boolean" not-null="true" ></property>
 	</class>
 </hibernate-mapping>
