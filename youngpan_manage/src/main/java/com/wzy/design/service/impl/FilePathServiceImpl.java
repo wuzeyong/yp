@@ -2,8 +2,10 @@ package com.wzy.design.service.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +24,19 @@ public class FilePathServiceImpl implements FilePathService{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void remove(FileInfo fileInfo) {
+	public List<FileInfo> remove(FileInfo fileInfo) {
 		Session session = sessionFactory.getCurrentSession();
-		List<FilePath> filePaths = session.createCriteria(FilePath.class).add(Restrictions.eq("ancestor", fileInfo)).list();
+		List<FileInfo>  descendants = session.createCriteria(FilePath.class)
+				.setProjection(Projections.property( "descendant"))
+				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+				.add(Restrictions.eq("ancestor", fileInfo)).list();
+		List<FilePath> filePaths = session.createCriteria(FilePath.class).
+				add(Restrictions.in("descendant", descendants))
+				.list();
 		for(FilePath path:filePaths){
 			session.delete(path);
 		}
+		return descendants;
 	}
 
 

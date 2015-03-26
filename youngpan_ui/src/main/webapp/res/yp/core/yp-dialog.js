@@ -40,7 +40,7 @@
                 open : function() {
                     self.trigger('onOpen');
                 },
-                modal : false
+                modal : true
             });
             
             this._dialog = $(setting.el).dialog(dialogOptions);
@@ -85,6 +85,7 @@
 
         close : function() {
             this._dialog.dialog('close');
+            this._dialog.empty();
         },
 
         toJson : function(form) {

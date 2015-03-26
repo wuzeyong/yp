@@ -37,5 +37,7 @@
 			type="timestamp"></property>
 		<property name="passwordRetries" column="c_password_retries"
 			type="integer"></property>
+		<property name="maxCapacity" column="c_max_capacity" type="long"></property>
+		<property name="usedCapactity" column="c_used_capactity" type="long"></property>
 	</class>
 </hibernate-mapping>

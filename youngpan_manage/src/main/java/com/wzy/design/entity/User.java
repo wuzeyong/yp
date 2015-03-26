@@ -68,7 +68,17 @@ public class User extends AbstractEntity {
      * 密码重试次数
      */
     private int passwordRetries;
-
+    
+    /**
+     * 用户网盘容量,默认为4G
+     */
+    private Long maxCapacity = (long)4*1024*1024*1024;
+    
+    /**
+     * 使用的网盘容量
+     */
+    private Long usedCapactity;
+    
     public String getName() {
         return name;
     }
@@ -156,6 +166,22 @@ public class User extends AbstractEntity {
     public String getStateLabel(){
         return this.state.getLabel();
     }
+
+	public Long getMaxCapacity() {
+		return maxCapacity;
+	}
+
+	public void setMaxCapacity(Long maxCapacity) {
+		this.maxCapacity = maxCapacity;
+	}
+
+	public Long getUsedCapactity() {
+		return usedCapactity;
+	}
+
+	public void setUsedCapactity(Long usedCapactity) {
+		this.usedCapactity = usedCapactity;
+	}
     
     
 }

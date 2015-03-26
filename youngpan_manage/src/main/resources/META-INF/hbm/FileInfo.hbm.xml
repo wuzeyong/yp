@@ -15,15 +15,12 @@
 			length="255" not-null="true"></property>
 		<property name="fileSize" column="c_file_size" type="long"></property>
 		<property name="contentType" column="c_content_type" type="string" length="255" not-null="true" ></property>
-		<property name="fileType" column="c_file_type" not-null="true">
-			<type name="org.hibernate.type.EnumType">
-				<param name="enumClass">com.wzy.design.base.FileType</param>
-				<param name="useNamed">true</param>
-			</type>
-		</property>
 		<property name="userName" column="c_user_name" type="string"
 			length="64" not-null="true"></property>
 		<property name="origin" column="c_origin" type="boolean" not-null="true" ></property>
 		<property name="directory" column="c_directory" type="boolean" not-null="true" ></property>
+		<property name="trash" column="c_trash" type="boolean" not-null="true" ></property>
+		<property name="trashTime" column="c_trash_time" type="timestamp" ></property>
+		<property name="topTrash" column="c_top_trash" type="boolean" not-null="true" ></property>
 	</class>
 </hibernate-mapping>

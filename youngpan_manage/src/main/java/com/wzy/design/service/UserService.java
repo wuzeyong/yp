@@ -1,6 +1,7 @@
 package com.wzy.design.service;
 
 import com.wzy.design.base.Role;
+import com.wzy.design.domain.UserInfo;
 import com.wzy.design.entity.User;
 import com.wzy.design.support.Page;
 
@@ -27,5 +28,9 @@ public interface UserService {
 	    public Page<User> query(String username,String realName, Role role, int start,int limit);
 
 	    public User findByName(String name);
+
+		public void regist(UserInfo userInfo);
+
+		User update(UserInfo userInfo);
 
 }

@@ -7,7 +7,7 @@
 		add : {key:"add",iconClazz:"icon-plus",title:"添加"},
 		lock : {key:"lock",iconClazz:"icon-lock orange",title:"锁定"},
 		unlock : {key:"unlock",iconClazz:"icon-unlock",title:"解锁"},
-		share:{key:'share',iconClazz:'icon-share-alt',title:'分享'},
+		undo:{key:"undo",iconClazz:"icon-undo green",title:"撤销"},
 		download:{key:'download',iconClazz:'icon-download-alt',title:'下载'},
 		batchDownload:{key:'batchDownload',iconClazz:'icon-download-alt',title:'下载'},
 		rename:{key:'rename',iconClazz:'icon-edit',title:'重命名'},

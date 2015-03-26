@@ -10,7 +10,7 @@
 		<div class="navbar-header pull-left">
 			<a href="#" class="navbar-brand">
 				<small>
-					<i class="icon-leaf"></i>
+					<i class="icon-cloud  green"></i>
 					${consoleTitle}
 				</small>
 			</a><!-- /.brand -->
@@ -97,10 +97,19 @@
 
 					<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 						<li>
-							<a href="#">
+							<a id="peronInfoEditting"  href="javascript:void(0);">
 								<i class="icon-user"></i>
 								个人信息
 							</a>
+							<div id="personInfoEdittingDialog"></div>
+						</li>
+						<li class="divider"></li>
+						<li >
+							<a id="passwordResetting"  href="javascript:void(0);">
+								<i class="icon-edit"></i>
+								修改密码
+							</a>
+							<div id="passwordResettingDialog"></div>
 						</li>
 
 						<li class="divider"></li>

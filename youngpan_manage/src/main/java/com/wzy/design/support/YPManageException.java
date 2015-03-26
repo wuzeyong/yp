@@ -34,6 +34,12 @@ public class YPManageException extends RuntimeException {
 
 	public static final int NO_FILES = 8;
 
+	public static final int HDFS_IO_FAILE = 9;
+
+	public static final int FILE_UPLOAD_ERROR = 10;
+
+	public static final int FILE_EXIT = 11;
+
     public YPManageException() {
         super();
     }

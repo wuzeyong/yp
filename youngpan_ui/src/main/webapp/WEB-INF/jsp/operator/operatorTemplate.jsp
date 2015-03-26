@@ -13,8 +13,8 @@
 
 		<link href="${contextPath}res/assets/css/bootstrap.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="${contextPath}res/assets/css/font-awesome.min.css" />
-		<link rel="stylesheet" href="${contextPath}res/assets/css/dropzone.css" />
-
+		<%-- <link rel="stylesheet" href="${contextPath}res/assets/css/dropzone.css" />--%>
+		<link rel="stylesheet" href="${contextPath}res/assets/css/Huploadify.css" /> 
 		<!--[if IE 7]>
 		  <link rel="stylesheet" href="${contextPath}res/assets/css/font-awesome-ie7.min.css" />
 		<![endif]-->
@@ -33,7 +33,7 @@
 		  <link rel="stylesheet" href="${contextPath}res/assets/css/ace-ie.min.css" />
 		<![endif]-->
 		
-		<!-- ftm styles -->
+		<!-- yp styles -->
 		<link rel="stylesheet" href="${contextPath}res/css/yp-main.css?v=1" />
 		<link rel="stylesheet" href="${contextPath}res/assets/css/bootstrap-timepicker.css"/>
 		<!-- ace settings handler -->
@@ -133,14 +133,21 @@
 		<script src="${contextPath}res/assets/js/underscore.js"></script>
 		<script src="${contextPath}res/assets/js/bootbox.min.js"></script>
 		<script src="${contextPath}res/assets/js/jquery.gritter.min.js"></script>
-		<script src="${contextPath}res/assets/js/jquery.uploadify.js"></script>
+		<script src="${contextPath}res/assets/js/jquery.Huploadify.js"></script>
 		<script src="${contextPath}res/yp/yp-core.js"></script>
 		<script src="${contextPath}res/yp/yp-validate.js"></script>
-		<script src="${contextPath}res/yp/operator/upload.js?v=${v}"></script>
+		<script src="${contextPath}res/yp/operator/personInfo.js?v=${v}"></script>
+		<script src="${contextPath}res/assets/js/sjcl.js"></script>
 		<script type="text/javascript">
+			yp.constant.CONTEXT_PATH = "${contextPath}";
 			$(function(){
 				yp.Template.init();
-				//new yp.operator.FileSubmitForm();
+				$("#passwordResetting").click(function(){
+					new yp.operator.PasswordResetting();
+				});
+				$("#peronInfoEditting").click(function(){
+						new yp.operator.PersonInfoEditting();
+				});
 			})
 		</script>
 		

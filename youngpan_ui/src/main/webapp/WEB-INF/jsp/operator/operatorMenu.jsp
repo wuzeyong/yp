@@ -37,37 +37,25 @@
 		<c:set var="indexMenu" value="${requestURI.indexOf('operator/index.do') >= 0 }"></c:set>
 		<li name="index" class="${indexMenu ? 'active' : '' }"><a href="${contextPath}operator/index.do"> <i class="icon-columns"></i> <span class="menu-text"> 全部文件 </span>
 		</a></li>
-		<c:set var="docMenu" value="${requestURI.indexOf('operator/doc/index.do') >= 0 }"></c:set>
-		<li name="doc" class="${docMenu ? 'active' : '' }"><a href="${contextPath}operator/doc/index.do"> <i class="icon-list-alt"></i> <span class="menu-text"> 文档</span>
-		</a></li>
 		<c:set var="pictureMenu" value="${requestURI.indexOf('operator/picture/index.do') >= 0 }"></c:set>
 		<li name="picture" class="${pictureMenu ? 'active' : '' }"><a href="${contextPath}operator/picture/index.do"> <i class="icon-picture"></i> <span class="menu-text"> 图片</span>
 		</a></li>
-		<c:set var="filmMenu" value="${requestURI.indexOf('operator/film/index.do') >= 0 }"></c:set>
-		<li name="film" class="${filmMenu ? 'active' : '' }"><a href="${contextPath}operator/film/index.do"> <i class="icon-film"></i> <span class="menu-text"> 视频</span>
+		<c:set var="documentMenu" value="${requestURI.indexOf('operator/document/index.do') >= 0 }"></c:set>
+		<li name="document" class="${documentMenu ? 'active' : '' }"><a href="${contextPath}operator/document/index.do"> <i class="icon-list-alt"></i> <span class="menu-text"> 文档</span>
+		</a></li>
+		<c:set var="videoMenu" value="${requestURI.indexOf('operator/video/index.do') >= 0 }"></c:set>
+		<li name="video" class="${videoMenu ? 'active' : '' }"><a href="${contextPath}operator/video/index.do"> <i class="icon-film"></i> <span class="menu-text"> 视频</span>
 		</a></li>
 		<c:set var="musicMenu" value="${requestURI.indexOf('operator/music/index.do') >= 0 }"></c:set>
 		<li name="music" class="${musicMenu ? 'active' : '' }"><a href="${contextPath}operator/music/index.do"> <i class="icon-music"></i> <span class="menu-text"> 音乐</span>
 		</a></li>
+		<c:set var="otherMenu" value="${requestURI.indexOf('operator/other/index.do') >= 0 }"></c:set>
+		<li name="other" class="${otherMenu ? 'active' : '' }"><a href="${contextPath}operator/other/index.do"> <i class="icon-ellipsis-horizontal"></i> <span class="menu-text"> 其它</span>
+		</a></li>
 		<li class="divider"></li>
 		<c:set var="trashMenu" value="${requestURI.indexOf('operator/trash/index.do') >= 0 }"></c:set>
-		<li name="trash" class="${trashMenu ? 'active' : '' }"><a href="${contextPath}operator/trashc/index.do"> <i class="icon-trash"></i> <span class="menu-text"> 垃圾箱</span>
+		<li name="trash" class="${trashMenu ? 'active' : '' }"><a href="${contextPath}operator/trash/index.do"> <i class="icon-trash"></i> <span class="menu-text"> 回收站</span>
 		</a></li>
-		<!-- <li><a href="#" class="dropdown-toggle"> <i class="icon-trash"></i> <span class="menu-text"> 查询统计 </span> <b class="arrow icon-angle-down"></b>
-		</a>
-
-			<ul class="submenu">
-				<li><a href="elements.html"> <i class="icon-double-angle-right"></i> 组件
-				</a></li>
-
-				<li><a href="#" class="dropdown-toggle"> <i class="icon-double-angle-right"></i> 三级菜单 <b class="arrow icon-angle-down"></b>
-				</a>
-
-					<ul class="submenu">
-						<li><a href="#"> <i class="icon-leaf"></i> 第一级
-						</a></li>
-					</ul></li>
-			</ul></li> -->
 	</ul>
 	<!-- /.nav-list -->
 

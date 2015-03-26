@@ -112,19 +112,55 @@ body {
 	vertical-align: middle;
 }
 /********************for file Type**************************************/
-.pdf{
+.application-pdf{
 	background: url("image/pdf.png") no-repeat;
 	height:20px;
 }
-.doc{
+.application-msword{
 	background: url("image/doc.png") no-repeat;
 	height:20px;
 }
-.film{
+.video-avi{
 	background: url("image/film.png") no-repeat;
 	height:20px;
 }
-.music{
+.video-mpg{
+	background: url("image/film.png") no-repeat;
+	height:20px;
+}
+.video-x-sgi-movie{
+	background: url("image/film.png") no-repeat;
+	height:20px;
+}
+.video-mpeg4{
+	background: url("image/film.png") no-repeat;
+	height:20px;
+}
+.application-x-shockwave-flash{
+	background: url("image/film.png") no-repeat;
+	height:20px;
+}
+.audio-mp3{
+	background: url("image/music.png") no-repeat;
+	height:20px;
+}
+.audio-wav{
+	background: url("image/music.png") no-repeat;
+	height:20px;
+}
+.audio-x-ms-wma{
+	background: url("image/music.png") no-repeat;
+	height:20px;
+}
+.audio-aiff{
+	background: url("image/music.png") no-repeat;
+	height:20px;
+}
+.audio-basic{
+	background: url("image/music.png") no-repeat;
+	height:20px;
+}
+.audio-x-pn-realaudio{
 	background: url("image/music.png") no-repeat;
 	height:20px;
 }
@@ -132,27 +168,49 @@ body {
 	background: url("image/notype.png") no-repeat;
 	height:20px;
 }
-.picture{
+.image-pjpeg{
 	background: url("image/picture.png") no-repeat;
 	height:20px;
 }
-.ppt{
+.image-gif{
+	background: url("image/picture.png") no-repeat;
+	height:20px;
+}
+.image-bmp{
+	background: url("image/picture.png") no-repeat;
+	height:20px;
+}
+.image-png{
+	background: url("image/picture.png") no-repeat;
+	height:20px;
+}
+.application-vnd.ms-powerpoint{
 	background: url("image/ppt.png") no-repeat;
 	height:20px;
 }
-.txt{
+.text-plain{
 	background: url("image/txt.png") no-repeat;
 	height:20px;
 }
-.xml{
+.text-xml{
 	background: url("image/xml.png") no-repeat;
 	height:20px;
 }
-.xsl{
+.text-html{
+	background: url("image/xml.png") no-repeat;
+	height:20px;
+}
+.application-x-xls{
 	background: url("image/xsl.png") no-repeat;
 	height:20px;
 }
 .dir{
 	background: url("image/dir.png") no-repeat;
 	height:20px;
+}
+.trash{
+	background: url("image/trash.jpg") no-repeat;
+}
+.yp-upload{
+	background: url("image/upload.png") no-repeat;
 }

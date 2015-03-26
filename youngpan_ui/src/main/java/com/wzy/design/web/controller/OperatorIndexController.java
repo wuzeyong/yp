@@ -1,11 +1,3 @@
-/*
- *--------------------------------------
- * Apusic (Kingdee Middleware)
- *---------------------------------------
- * Copyright By Apusic ,All right Reserved
- * caihuiji   2013-6-27   comment
- * caihuiji  2013-6-27  Created
- */
 package com.wzy.design.web.controller;
 
 import java.util.List;
@@ -26,7 +18,7 @@ import com.wzy.design.web.view.OperatorModelAndView;
 /**
  * 操作员首页
  * 
- * @author nihy
+ * @author wzy
  * 
  */
 @Controller
@@ -46,10 +38,10 @@ public class OperatorIndexController extends BaseController{
     @RequestMapping("index.do")
     public ModelAndView index(Integer id,boolean fileBread) {
     	String url = INDEX;
-    	if(id != null){
+    	/*if(id != null){
     		List<FileInfo> descendants = fileInfoService.queryDescendantsByAncestor(id);
     		url = descendants.size() > 0 ?INDEX:UPLOAD; 
-    	}
+    	}*/
     	OperatorModelAndView omv = new OperatorModelAndView(url);
     	if(id != null){
     		FileInfo current = fileInfoService.get(id);
@@ -58,7 +50,6 @@ public class OperatorIndexController extends BaseController{
     		omv.addObject("ancestors", ancestors);
     	}
     	omv.addObject("isPage", true);
-    	omv.addObject("fileBread",fileBread);
         return omv;
     }
     

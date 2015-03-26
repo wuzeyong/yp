@@ -28,6 +28,9 @@
 		<property name="filePathService">
 			<ref local="filePathService"/>
 		</property>
+		<property name="hdfsService">
+			<ref local="hdfsService"/>
+		</property>
 	</bean>
 	
 	<bean id="filePathService"
@@ -36,28 +39,13 @@
 			<ref local="sessionFactory"/>
 		</property>
 	</bean>
-	<!-- 	
-	<bean id="nodeService"
-		class="com.apusic.ft.manage.common.impl.NodeServiceImpl">
-		<property name="sessionFactory">
-			<ref local="sessionFactory" />
-		</property>
-		<property name="userService" ref="userService"></property>
-		<property name="salt" value="${password.salt}"></property>
+	 	
+	<bean id="hdfsService"
+		class="com.wzy.design.service.impl.HdfsServiceImpl">
+		<property name="hdfsPath" value="${hadoop.hdfsPath}"></property>
 	</bean>
 	
-	<bean id="directoryService"
-		class="com.apusic.ft.manage.common.impl.DirectoryServiceImpl">
-		<property name="sessionFactory">
-			<ref local="sessionFactory" />
-		</property>
+	<bean id="cacheManager"
+		class="com.wzy.design.support.CacheManager" scope="singleton">
 	</bean>
-	
-	<bean id="taskService"
-		class="com.apusic.ft.manage.task.TaskServiceImpl">
-		<property name="sessionFactory">
-			<ref local="sessionFactory" />
-		</property>
-	</bean> -->
-	
 </beans>

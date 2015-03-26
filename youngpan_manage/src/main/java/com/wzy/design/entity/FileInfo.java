@@ -1,6 +1,8 @@
 package com.wzy.design.entity;
 
 
+import java.util.Date;
+
 import com.wzy.design.base.AbstractEntity;
 import com.wzy.design.base.FileType;
 
@@ -21,10 +23,8 @@ public class FileInfo extends AbstractEntity {
 	 */
 	private Long fileSize;
 	/**
-	 * 文件类型
+	 * 文件的标准类型
 	 */
-	private FileType fileType;
-	
 	private String contentType;
 	
 	/**
@@ -41,6 +41,21 @@ public class FileInfo extends AbstractEntity {
 	 * 是否目录
 	 */
 	private boolean directory;
+	
+	/**
+	 * 是否为垃圾
+	 */
+	private boolean trash;
+	
+	/**
+	 * 标志为垃圾的时间
+	 */
+	private Date trashTime;
+	
+	/**
+	 * 是否为第一个垃圾
+	 */
+	private boolean topTrash;
 	
 	public String getFileName() {
 		return fileName;
@@ -60,20 +75,11 @@ public class FileInfo extends AbstractEntity {
 	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
 	}
-	public FileType getFileType() {
-		return fileType;
-	}
-	public String getFileTypeLabel(){
-		return fileType.getType();
-	}
 	public String getContentType() {
 		return contentType;
 	}
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
-	}
-	public void setFileType(FileType fileType) {
-		this.fileType = fileType;
 	}
 	public String getUserName() {
 		return userName;
@@ -92,6 +98,24 @@ public class FileInfo extends AbstractEntity {
 	}
 	public void setDirectory(boolean directory) {
 		this.directory = directory;
+	}
+	public boolean isTrash() {
+		return trash;
+	}
+	public void setTrash(boolean trash) {
+		this.trash = trash;
+	}
+	public Date getTrashTime() {
+		return trashTime;
+	}
+	public void setTrashTime(Date trashTime) {
+		this.trashTime = trashTime;
+	}
+	public boolean isTopTrash() {
+		return topTrash;
+	}
+	public void setTopTrash(boolean topTrash) {
+		this.topTrash = topTrash;
 	}
 	
 }

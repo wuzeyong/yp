@@ -10,10 +10,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wzy.design.base.Role;
 import com.wzy.design.base.UserState;
+import com.wzy.design.domain.UserInfo;
 import com.wzy.design.entity.User;
 import com.wzy.design.service.UserService;
 import com.wzy.design.support.YPManageException;
@@ -23,6 +25,9 @@ import com.wzy.design.util.CodecUtil;
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
+	private static final Long MAX_CAPACITY = (long)4*1024*1024*1024;
+	private static final int PASSWORD_RETRIES = 3;
+	
 	private String salt;
     private SessionFactory sessionFactory;
     
@@ -53,17 +58,18 @@ public class UserServiceImpl implements UserService {
         return (User) session.createCriteria(User.class).add(Restrictions.eq("name", name)).uniqueResult();
     }
 
-   /* @Override
-    public void update(UserUpdateInfo updateInfo) {
+    @Override
+    public User update(UserInfo userInfo) {
         Session session = sessionFactory.getCurrentSession();
-        User tmp = (User) session.get(User.class, updateInfo.getId());
+        User tmp = (User) session.get(User.class, userInfo.getId());
         checkSate(tmp);
-        tmp.setMobile(updateInfo.getMobile());
-        tmp.setRealName(updateInfo.getRealName());
-        tmp.setEmail(updateInfo.getEmail());
+        tmp.setMobile(userInfo.getMobile());
+        tmp.setRealName(userInfo.getRealName());
+        tmp.setEmail(userInfo.getEmail());
         tmp.setLastModify(new Date());
         session.save(tmp);
-    }*/
+        return tmp; 
+    }
 
     private void checkSate(User tmp) {
         if(UserState.LOCK.equals(tmp.getState())){
@@ -214,5 +220,25 @@ public class UserServiceImpl implements UserService {
     public void setSalt(String salt) {
         this.salt = salt;
     }
+
+	@Override
+	public void regist(UserInfo userInfo) {
+		Session session = sessionFactory.getCurrentSession();
+		User user = findByName(userInfo.getName());
+		if(user != null){
+			throw new YPManageException(YPManageException.USER_EXISTS, "用户已存在！");
+		}
+		User tmp = new User();
+		BeanUtils.copyProperties(userInfo, tmp);
+		tmp.setPassword(encodePassword(userInfo.getName() ,userInfo.getPassWord()));
+		tmp.setLastModify(new Date());
+		tmp.setMaxCapacity(MAX_CAPACITY);
+		tmp.setUsedCapactity((long)0);
+		tmp.setPasswordRetries(PASSWORD_RETRIES);
+		tmp.setRole(Role.OPERATOR);
+		tmp.setState(UserState.NORMAL);
+		tmp.setPasswordValidDate(new Date());
+		session.save(tmp);
+	}
 
 }
