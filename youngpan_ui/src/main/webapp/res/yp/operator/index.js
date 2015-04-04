@@ -8,16 +8,16 @@ yp.common.FileGrid = yp.Core.extend({
 		this.operate  = yp.utils.createDelegate(this.operate,this);
 		this.gridOptions.url =this.gridOptions.url+yp.constant.CURRENTID;
 		this.actionGrid = new yp.ActionGrid(this);
-		this.initDocumentTreeDialog();
+		//this.initDocumentTreeDialog();
 	},
-	initDocumentTreeDialog : function(){
+	/*initDocumentTreeDialog : function(){
 		this.dialog = new yp.AjaxValidationDialog({
 			el : "#docTree-editor",
 			title : "移动到",
 			width : 500,
 			height:460,
 		});
-	},
+	},*/
 	gridEL:"#grid-table",
 	pagerEL:"#grid-pager",
 	searcherEL:"#yp-grid-searcher",
@@ -50,8 +50,9 @@ yp.common.FileGrid = yp.Core.extend({
 			this.actionGrid.executeBatch("fileinfo/remove.do","请确认要删除吗？");
 			break;	
 		case "move" :
-			this.dialog.setTitle("移动到");
-			yp.Service.addByDialog2Grid(this.dialog,this.actionGrid,"fileinfo/moveView.do","fileinfo/move.do");
+			//this.dialog.setTitle("移动到");
+			//yp.Service.addByDialog2Grid(this.dialog,this.actionGrid,"fileinfo/moveView.do","fileinfo/move.do");
+			var docTree = new yp.operator.DocTree( {id : rowId,actionGrid:this.actionGrid});
 			break;
 		case "rename" :
 			this.rename(rowId,rowData);
@@ -111,7 +112,7 @@ yp.common.FileGrid = yp.Core.extend({
 				 var href = "index.do?id=" + rowObject.id;
 				 return '<a  href="' + href + '" >'+colValue+'</a>';
 			}else{
-				 return '<a  href="#">'+colValue+'</a>';
+				 return colValue;
 			}
 		};
 	},

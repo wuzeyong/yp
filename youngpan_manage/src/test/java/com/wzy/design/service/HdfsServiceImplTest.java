@@ -12,7 +12,7 @@ public class HdfsServiceImplTest extends AbstractTransactionalTest{
 	
 	@Test
 	public void testLs(){
-		hdfsService.ls("/admin");
+		hdfsService.ls("/admin/aa/ddd");
 		//hdfsService.rmr("/admin/aa/dd/nnn");
 	}
 	

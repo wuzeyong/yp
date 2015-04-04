@@ -139,4 +139,24 @@ public class HdfsServiceImpl implements HdfsService {
 		}
         
     }
+
+	@Override
+	public void rename(String fileName, String newPath,String oldPath) {
+		try {
+			FileSystem fs =  FileSystem.get(URI.create(hdfsPath), config());
+			fs.rename(new Path(oldPath), new Path(newPath));
+		} catch (IOException e) {
+			throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
+		}
+	}
+
+	@Override
+	public void move(String srcPath, String desPath) {
+		try {
+			FileSystem fs =  FileSystem.get(URI.create(hdfsPath), config());
+			fs.rename(new Path(srcPath), new Path(desPath));
+		} catch (IOException e) {
+			throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
+		}
+	}
 }

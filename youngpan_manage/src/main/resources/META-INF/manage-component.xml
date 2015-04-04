@@ -90,6 +90,39 @@
 			</props>
 		</property>
 	</bean>
+	
+	<!-- 添加调度的任务bean 配置对应的class-->  
+    <bean id="trashSchedule" class="com.wzy.design.quartz.TrashQuartz" />  
+  
+    <!--配置调度具体执行的方法-->  
+    <bean id="trashDetail"  
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="trashSchedule" />  
+        <property name="targetMethod" value="cleanTrash" />  
+        <property name="concurrent" value="false" />  
+    </bean>  
+  
+    <!--配置调度执行的触发的时间-->  
+    <bean id="trashTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="trashDetail"/>  
+        <property name="cronExpression">  
+            <!-- 每天早上2点执行任务调度 -->  
+            <value>0 0 22 * * ?</value>  
+        </property>  
+    </bean>  
+  
+      
+  
+    <!-- quartz的调度工厂 调度工厂只能有一个，多个调度任务在list中添加 -->  
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">  
+            <list>  
+                 <!-- 所有的调度列表-->  
+                <ref local="trashTrigger" />  
+                  
+            </list>  
+        </property>  
+    </bean>  
 
 	<!--  核心线程池，运行系统一些初始化任务等，线程池 调整 说明 参考 本工程 readme.txt -->
 	<!-- <bean id="coreTaskExecutor"

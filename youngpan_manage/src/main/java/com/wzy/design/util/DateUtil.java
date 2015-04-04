@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.time.DateUtils;
+
 
 public class DateUtil {
     public static int getFiled(Date date, int field) {
@@ -35,4 +37,5 @@ public class DateUtil {
 		}
     	return date;
     }
+
 }

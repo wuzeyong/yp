@@ -14,9 +14,10 @@
 <div id="grid-pager"></div>
 <div id="dialog"></div>
 <div id="upload-editor"></div>
-<div id="docTree-editor"></div>
+<div id="docTree"></div>
 
 <script src="${contextPath}res/yp/operator/index.js?v=${v}"></script>
+<script src="${contextPath}res/yp/operator/docTree.js?v=${v}"></script>
 <script src="${contextPath}res/yp/operator/upload.js?v=${v}"></script>
 <script type="text/javascript">
 	yp.constant.CONTEXT_PATH = "${contextPath}";
@@ -25,19 +26,6 @@
 	var fileGrid;
 	$(function() { 
 		fileGrid = new yp.common.FileGrid();
-		/*  new AjaxUpload($("#upload_file"),{
-			action:uploadUrl,
-			name:"file",
-			data: {
-				id : yp.constant.CURRENTID,
-			},
-			autoSubmit: true,
-			onSubmit:function(file,ext){
-			},
-			onComplete:function(file,response){
-				console.log(response);
-			}
-		});  */
 	});
 	 $("#upload_file").click(function(){
 		new yp.operator.UploadDialog({modal : false});

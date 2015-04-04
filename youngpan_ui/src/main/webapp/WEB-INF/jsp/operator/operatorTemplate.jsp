@@ -134,6 +134,7 @@
 		<script src="${contextPath}res/assets/js/bootbox.min.js"></script>
 		<script src="${contextPath}res/assets/js/jquery.gritter.min.js"></script>
 		<script src="${contextPath}res/assets/js/jquery.Huploadify.js"></script>
+		<script src="${contextPath}res/assets/js/jquery.easyui.min.js"></script>
 		<script src="${contextPath}res/yp/yp-core.js"></script>
 		<script src="${contextPath}res/yp/yp-validate.js"></script>
 		<script src="${contextPath}res/yp/operator/personInfo.js?v=${v}"></script>

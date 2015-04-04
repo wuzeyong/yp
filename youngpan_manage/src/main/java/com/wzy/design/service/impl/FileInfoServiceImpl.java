@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,6 +40,7 @@ import com.wzy.design.util.QueryUtil;
 public class FileInfoServiceImpl implements FileInfoService {
 	
 	private static final long DIRECTORY_SIZE = 4096;
+	private static final int TRADH_SAVE_DAY = -10;
 	
 	private SessionFactory sessionFactory;
 	
@@ -94,13 +96,17 @@ public class FileInfoServiceImpl implements FileInfoService {
 	}
 
 	@Override
-	public void updateFileName(int id, String fileName) {
+	public void updateFileName(int id, String fileName,User user) {
 		Session session = sessionFactory.getCurrentSession();
 		FileInfo  info = (FileInfo) session.get(FileInfo.class, id);
 		if(info == null){
 			throw new YPManageException(YPManageException.ID_NOT_EXISTS, "文件不存在！");
 		}
+		String fileInSidePath = getFilePath(id, user.getName());
+		String newPath = fileInSidePath.substring(0,fileInSidePath.length()-info.getFileName().length())+fileName;
+		hdfsService.rename(fileName,newPath,info.getPathInside());
 		info.setFileName(fileName);
+		info.setPathInside(newPath);
 		session.saveOrUpdate(info);
 	}
 
@@ -127,6 +133,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 				.list();
 		for(FileInfo descendant:descendantsRemoved){
 			descendant.setTrash(true);
+			descendant.setLastModify(new Date());
 		}
 		return fileRemoved;
 	}
@@ -335,7 +342,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 	protected String getFilePath(Integer id,String userName){
 		StringBuffer sb = new StringBuffer();
 		sb.append("/").append(userName);
-		if(id != null){
+		if(id != null || id !=0){
 			List<FileInfo> ancestors = queryAncestorByDescendant(id);
 			for(FileInfo ancestor:ancestors){
 				sb.append("/").append(ancestor.getFileName());
@@ -603,8 +610,10 @@ public class FileInfoServiceImpl implements FileInfoService {
 			session.delete(file);
 		}
 		hdfsService.rmr(filePath);
-		user.setUsedCapactity(user.getUsedCapactity()-fileRemoved.getFileSize());
-		session.saveOrUpdate(user);
+		if(user != null){
+			user.setUsedCapactity(user.getUsedCapactity()-fileRemoved.getFileSize());
+			session.saveOrUpdate(user);
+		}
 		return fileRemoved;
 	}
 
@@ -632,6 +641,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 		if(id == null){
 			fileInfos = session.createCriteria(FileInfo.class)
 					.add(Restrictions.eq("userName", userName))
+					.add(Restrictions.eq("trash", false))
 					.add(Restrictions.eq("origin", true))
 					.list();
 		}else{
@@ -650,7 +660,88 @@ public class FileInfoServiceImpl implements FileInfoService {
 			node.setText(file.getFileName());
 			nodes.add(node);
 		}
+		if(id == null){
+			List<TreeNode> roots = new ArrayList<TreeNode>();
+			TreeNode root = new TreeNode();
+			root.setId(0);
+			root.setText("全部文件");
+			root.setChildren(nodes);
+			root.setState("open");
+			roots.add(root);
+			return roots;
+		}
 		return nodes;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void cleanTrash() {
+		Session session = sessionFactory.getCurrentSession();
+		List<FileInfo> files = session.createCriteria(FileInfo.class)
+				.add(Restrictions.eq("trash", true))
+				.add(Restrictions.lt("lastModify", DateUtils.addDays(new Date(), TRADH_SAVE_DAY)))
+				.list();
+		for(FileInfo file:files){
+			removeForever(file.getId(), null);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void move(Integer id, Integer des,String userName) {
+		Session session = sessionFactory.getCurrentSession();
+		FileInfo srcFile = get(id);
+		FileInfo desFile = get(des);
+		//查找srcFile的所有子孙（包括自己）
+		List<FileInfo> descendantsOfSrc = session.createCriteria(FilePath.class)
+				.setProjection(Projections.property("descendant"))
+				.add(Restrictions.eq("ancestor", srcFile))
+				.list();
+		//查找src的所有祖先（不包括自己）
+		List<FileInfo> ancestorsOfSrc =  session.createCriteria(FilePath.class)
+			.setProjection(Projections.property("ancestor"))
+			.add(Restrictions.eq("descendant", srcFile))
+			.add(Restrictions.ne("ancestor", srcFile))
+			.list();
+		if(ancestorsOfSrc.size() > 0){
+			//删除多余的路径
+			List<FilePath> ancestorsPathOfSrc = session.createCriteria(FilePath.class)
+					.add(Restrictions.in("descendant", descendantsOfSrc))
+					.add(Restrictions.in("ancestor", ancestorsOfSrc))
+					.list();
+			for(FilePath filePath :ancestorsPathOfSrc){
+				session.delete(filePath);
+			}
+		}
+		String srcPath = srcFile.getPathInside();
+		String desPath = getFilePath(id, userName);
+		if(des != 0 ){
+			//查找所有desFile的祖先（不包括自己）
+			List<FileInfo> ancestorOfDes = session.createCriteria(FilePath.class)
+					.setProjection(Projections.property("ancestor"))
+					.add(Restrictions.eq("descendant", desFile))
+					.list();
+			for(FileInfo ancestor:ancestorOfDes){
+				for(FileInfo descendant:descendantsOfSrc){
+					FilePath path = new FilePath();
+					path.setAncestor(ancestor);
+					path.setDescendant(descendant);
+					path.setLastModify(new Date());
+					path.setFatherAndSon(false);
+					if(ancestor.getId() == desFile.getId() && descendant.getId() == srcFile.getId()){
+						path.setFatherAndSon(true);
+					}
+					session.save(path);
+				}
+			}
+			srcFile.setOrigin(false);
+		}else{
+			srcFile.setOrigin(true);
+		}
+		srcFile.setPathInside(desPath);
+		srcFile.setLastModify(new Date());
+		session.saveOrUpdate(srcFile);
+		hdfsService.move(srcPath,desPath);
 	}
 
 }

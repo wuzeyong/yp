@@ -1,6 +1,5 @@
 package com.wzy.design.service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wzy.design.domain.TreeNode;
 import com.wzy.design.entity.FileInfo;
 import com.wzy.design.entity.User;
-import com.wzy.design.support.Cache;
 import com.wzy.design.support.Page;
 
 public interface FileInfoService {
@@ -17,7 +15,7 @@ public interface FileInfoService {
 
 	public FileInfo get(int id);
 
-	public void updateFileName(int id, String fileName);
+	public void updateFileName(int id, String fileName,User user);
 
 	public List<FileInfo> remove(int[] ids);
 
@@ -60,5 +58,9 @@ public interface FileInfoService {
 	public void undo(Integer id);
 
 	public List<TreeNode> getNodes(String userName,Integer id);
+
+	public void cleanTrash();
+
+	public void move(Integer id, Integer des,String userName);
 
 }

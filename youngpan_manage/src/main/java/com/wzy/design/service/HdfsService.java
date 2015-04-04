@@ -14,4 +14,8 @@ public interface HdfsService {
 	public void rmr(String folder);
 	
 	public InputStream download(String path);
+
+	public void rename(String fileName, String newPath,String oldPath);
+
+	public void move(String srcPath, String desPath);
 }

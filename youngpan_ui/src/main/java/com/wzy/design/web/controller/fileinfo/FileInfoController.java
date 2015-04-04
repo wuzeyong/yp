@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,6 @@ import com.wzy.design.domain.TreeNode;
 import com.wzy.design.entity.FileInfo;
 import com.wzy.design.service.FileInfoService;
 import com.wzy.design.service.HdfsService;
-import com.wzy.design.support.Cache;
 import com.wzy.design.support.CacheManager;
 import com.wzy.design.web.controller.BaseController;
 
@@ -59,9 +59,15 @@ public class FileInfoController extends BaseController {
 	@RequestMapping("moveView.do")
     public ModelAndView moveView() {
         ModelAndView mv = new ModelAndView(DOCUMENT_TREE_VIEW);
-        
         return mv;
     }
+	
+	@RequestMapping("move.do")
+    public String move(Integer id,Integer des) {
+		fileInfoService.move(id,des,getCurrentUserName());
+        return SUCCESS_VIEW;
+    }
+	
 	
 	@RequestMapping("createDirectoryFirstlyView.do")
     public ModelAndView createDirectoryFirstlyView() {
@@ -72,7 +78,7 @@ public class FileInfoController extends BaseController {
 	
 	@RequestMapping("updateFileName.do")
 	public String update(int id ,String fileName){
-		fileInfoService.updateFileName(id,fileName);
+		fileInfoService.updateFileName(id,fileName,getCurrentUser());
 		return SUCCESS_VIEW;
 	}
 	
