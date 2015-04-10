@@ -5,6 +5,7 @@ yp.common.FileGrid = yp.Core.extend({
 		$.extend(this,config);
 		this.prepareGridOptions();
 		this.prepareGridOptionsType();
+		this.prepareGridOptionSize();
 		this.operate  = yp.utils.createDelegate(this.operate,this);
 		this.gridOptions.url =this.gridOptions.url+yp.constant.CURRENTID;
 		this.actionGrid = new yp.ActionGrid(this);
@@ -39,8 +40,7 @@ yp.common.FileGrid = yp.Core.extend({
 	operate : function(buttonKey, rowId,rowData,e){
 		switch (buttonKey) {
 		case "download" :
-			var data = {id : rowId}; 
-			this.actionGrid.execute("fileinfo/download.do",data);
+			window.location.href=yp.constant.CONTEXT_PATH + "operator/fileinfo/download.do?id="+rowId;
 			break;
 		case "remove" :
 			var data = {ids : rowId}; 
@@ -50,8 +50,6 @@ yp.common.FileGrid = yp.Core.extend({
 			this.actionGrid.executeBatch("fileinfo/remove.do","请确认要删除吗？");
 			break;	
 		case "move" :
-			//this.dialog.setTitle("移动到");
-			//yp.Service.addByDialog2Grid(this.dialog,this.actionGrid,"fileinfo/moveView.do","fileinfo/move.do");
 			var docTree = new yp.operator.DocTree( {id : rowId,actionGrid:this.actionGrid});
 			break;
 		case "rename" :
@@ -121,7 +119,27 @@ yp.common.FileGrid = yp.Core.extend({
 		var self = this;
 		//column of fileType
 		this.gridOptions.colModel[1].formatter = function(colValue,options,rowObject){
+			if(colValue != undefined){
+				var type=colValue.replace("/","-");    
+				return '<span class="col-xs-2 ' + type + '" ></span>';
+			}
 			return '<span class="col-xs-2 ' + colValue + '" ></span>';
+		};
+	},
+	
+	prepareGridOptionSize : function(){
+		var self = this;
+		//column of fileType
+		this.gridOptions.colModel[3].formatter = function(colValue,options,rowObject){
+			var size = colValue;
+			if(size < 1024)
+				return size+'B';
+			else if(size < 1024 * 1024)
+				return parseInt(size/1024)+'KB';
+			else if(size < 1024 * 1024*1024)
+				return parseInt(size/(1024*1024))+'MB';
+			else if(size < 1024 * 1024*1024*1024)
+				return parseInt(size/(1024*1024*1024))+'GB';
 		};
 	},
 	

@@ -16,9 +16,6 @@
 <div id="upload-editor"></div>
 <div id="docTree"></div>
 
-<script src="${contextPath}res/yp/operator/index.js?v=${v}"></script>
-<script src="${contextPath}res/yp/operator/docTree.js?v=${v}"></script>
-<script src="${contextPath}res/yp/operator/upload.js?v=${v}"></script>
 <script type="text/javascript">
 	yp.constant.CONTEXT_PATH = "${contextPath}";
 	yp.constant.CURRENTID = '${current.id}';

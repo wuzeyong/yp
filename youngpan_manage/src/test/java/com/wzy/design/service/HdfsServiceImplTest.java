@@ -16,5 +16,8 @@ public class HdfsServiceImplTest extends AbstractTransactionalTest{
 		//hdfsService.rmr("/admin/aa/dd/nnn");
 	}
 	
-	
+	@Test
+	public void testRmr(){
+		//hdfsService.rmr("/admin/aa/ddd/nnn");
+	}
 }

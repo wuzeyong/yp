@@ -156,11 +156,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 			String path = fileInSidePath + "/"+multipartFile.getOriginalFilename();
 			FileInfo  file = new FileInfo();
 			List<String> contentTypes = getAllContentTypes();
-			if(contentTypes.contains(multipartFile.getContentType())){
-				file.setContentType(multipartFile.getContentType().replace("/", "-"));
-			}else{
-				file.setContentType("notype");
-			}
+			file.setContentType(multipartFile.getContentType());
 			file.setDirectory(false);
 			file.setFileName(multipartFile.getOriginalFilename());
 			file.setFileSize(multipartFile.getSize());
@@ -183,6 +179,12 @@ public class FileInfoServiceImpl implements FileInfoService {
 			List<FileInfo> ancestors = null;
 			if(id != null){
 				ancestors = queryAncestorByDescendant(id);
+				for(FileInfo ancestor:ancestors){
+					//每个父增加文件大小
+					ancestor.setFileSize(ancestor.getFileSize()+file.getFileSize());
+					ancestor.setLastModify(new Date());
+					session.save(ancestor);
+				}
 				List<FileInfo> descendants = queryDescendantsByAncestor(id);
 				for(FileInfo descendant:descendants){
 					if(descendant.getFileName().equals(multipartFile.getOriginalFilename()) && !descendant.isDirectory())
@@ -195,6 +197,9 @@ public class FileInfoServiceImpl implements FileInfoService {
 				filePath.setFatherAndSon(true);
 				filePath.setLastModify(new Date());
 				session.save(filePath);
+				parentFile.setFileSize(parentFile.getFileSize()+file.getFileSize());
+				parentFile.setLastModify(new Date());
+				session.save(parentFile);
 			}else{
 				ancestors = new ArrayList<FileInfo>();
 			}
@@ -312,11 +317,19 @@ public class FileInfoServiceImpl implements FileInfoService {
 		FilePath path = null;
 		if(id != null){
 			ancestors = queryAncestorByDescendant(id);
+			for(FileInfo ancestor:ancestors){
+				ancestor.setFileSize(ancestor.getFileSize()+DIRECTORY_SIZE);
+				ancestor.setLastModify(new Date());
+				session.save(ancestor);
+			}
 			FileInfo parentFile = get(id);
 			path = new FilePath();
 			path.setAncestor(parentFile);
 			path.setDescendant(fileInfo);
 			path.setFatherAndSon(true);
+			parentFile.setFileSize(parentFile.getFileSize()+DIRECTORY_SIZE);
+			parentFile.setLastModify(new Date());
+			session.save(parentFile);
 		}else{
 			fileInfo.setOrigin(true);
 			ancestors = new ArrayList<FileInfo>();
@@ -342,7 +355,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 	protected String getFilePath(Integer id,String userName){
 		StringBuffer sb = new StringBuffer();
 		sb.append("/").append(userName);
-		if(id != null || id !=0){
+		if(id != null && id != 0){
 			List<FileInfo> ancestors = queryAncestorByDescendant(id);
 			for(FileInfo ancestor:ancestors){
 				sb.append("/").append(ancestor.getFileName());
@@ -714,7 +727,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 			}
 		}
 		String srcPath = srcFile.getPathInside();
-		String desPath = getFilePath(id, userName);
+		String desPath = getFilePath(des, userName);
 		if(des != 0 ){
 			//查找所有desFile的祖先（不包括自己）
 			List<FileInfo> ancestorOfDes = session.createCriteria(FilePath.class)

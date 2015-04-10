@@ -1,5 +1,6 @@
 package com.wzy.design.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -9,7 +10,6 @@ import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.mapred.JobConf;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +22,17 @@ public class HdfsServiceImpl implements HdfsService {
 	private static final int BUFFER_SIZE = 2048;
 	
 	private String hdfsPath;
+	private String tmpPath;
 
 	public void setHdfsPath(String hdfsPath) {
 		this.hdfsPath = hdfsPath;
 	}
 	
-	 //加载Hadoop配置文件
+	 public void setTmpPath(String tmpPath) {
+		this.tmpPath = tmpPath;
+	}
+
+	//加载Hadoop配置文件
     public  static JobConf config(){
         JobConf conf = new JobConf(HdfsServiceImpl.class);
         conf.setJobName("HdfsServiceImpl");
@@ -116,17 +121,17 @@ public class HdfsServiceImpl implements HdfsService {
     
     
     //下载文件到本地系统
-    public InputStream download(String path){
+    public byte[] download(String srcPath){
     	FileSystem fs = null;
-    	 FSDataInputStream fsIn = null;
-    	 FSDataOutputStream out = null;
+    	FSDataInputStream fsIn = null;
     	try {
+    		Path path = new Path(srcPath);
             fs = FileSystem.get(URI.create(hdfsPath), config());
-            fsIn =  fs.open(new Path(path));
-            IOUtils.copyBytes(fsIn, out, config());
-            out.getWrappedStream();
-            //fs.copyToLocalFile(new Path(path), new Path("/home/wuzeyong/svn命令"));
-            return fsIn;
+            fsIn = fs.open(path);
+            FileStatus stat = fs.getFileStatus(path);
+            byte[] buffer = new byte[Integer.parseInt(String.valueOf(stat.getLen()))];
+            fsIn.readFully(0, buffer);
+            return buffer;
 		} catch (IOException e) {
 			throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
 		}finally{
@@ -137,7 +142,34 @@ public class HdfsServiceImpl implements HdfsService {
 				throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
 			}
 		}
-        
+    }
+    
+    
+    
+    public String downloadDir(String srcPath,String userName){
+    	String destPath = tmpPath+"/"+userName;
+    	File download = new File(destPath);
+    	if(!download.exists()){
+    		download.mkdir();
+    	}
+    	FileSystem fs = null;
+    	try {
+    		Path path = new Path(srcPath);
+            fs = FileSystem.get(URI.create(hdfsPath), config());
+            FileStatus file = fs.getFileStatus(path);
+           if (!file.isFile()) {
+        	   fs.copyToLocalFile(file.getPath(), new Path(destPath));
+           }
+            return destPath;
+		} catch (IOException e) {
+			throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
+		}finally{
+			try {
+				fs.close();
+			} catch (IOException e) {
+				throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
+			}
+		}
     }
 
 	@Override
@@ -151,10 +183,10 @@ public class HdfsServiceImpl implements HdfsService {
 	}
 
 	@Override
-	public void move(String srcPath, String desPath) {
+	public void move(String srcPath, String finalPath) {
 		try {
 			FileSystem fs =  FileSystem.get(URI.create(hdfsPath), config());
-			fs.rename(new Path(srcPath), new Path(desPath));
+			fs.rename(new Path(srcPath), new Path(finalPath));
 		} catch (IOException e) {
 			throw new YPManageException(YPManageException.HDFS_IO_FAILE,"后台文件系统出错，请联系管理员!");
 		}

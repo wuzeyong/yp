@@ -168,6 +168,10 @@ body {
 	background: url("image/notype.png") no-repeat;
 	height:20px;
 }
+.image-jpeg{
+	background: url("image/picture.png") no-repeat;
+	height:20px;
+}
 .image-pjpeg{
 	background: url("image/picture.png") no-repeat;
 	height:20px;

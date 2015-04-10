@@ -43,6 +43,7 @@
 	<bean id="hdfsService"
 		class="com.wzy.design.service.impl.HdfsServiceImpl">
 		<property name="hdfsPath" value="${hadoop.hdfsPath}"></property>
+		<property name="tmpPath" value="${hadoop.tmpPath}"></property>
 	</bean>
 	
 	<bean id="cacheManager"

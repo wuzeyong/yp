@@ -138,6 +138,9 @@
 		<script src="${contextPath}res/yp/yp-core.js"></script>
 		<script src="${contextPath}res/yp/yp-validate.js"></script>
 		<script src="${contextPath}res/yp/operator/personInfo.js?v=${v}"></script>
+		<script src="${contextPath}res/yp/operator/index.js?v=${v}"></script>
+		<script src="${contextPath}res/yp/operator/docTree.js?v=${v}"></script>
+		<script src="${contextPath}res/yp/operator/upload.js?v=${v}"></script>
 		<script src="${contextPath}res/assets/js/sjcl.js"></script>
 		<script type="text/javascript">
 			yp.constant.CONTEXT_PATH = "${contextPath}";

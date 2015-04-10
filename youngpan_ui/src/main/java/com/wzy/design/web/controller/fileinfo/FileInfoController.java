@@ -1,16 +1,17 @@
 package com.wzy.design.web.controller.fileinfo;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.hadoop.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import com.wzy.design.entity.FileInfo;
 import com.wzy.design.service.FileInfoService;
 import com.wzy.design.service.HdfsService;
 import com.wzy.design.support.CacheManager;
+import com.wzy.design.util.ZipUtil;
 import com.wzy.design.web.controller.BaseController;
 
 @Controller
@@ -121,29 +123,77 @@ public class FileInfoController extends BaseController {
 	@RequestMapping("download.do")
 	public String download(Integer id,HttpServletRequest request,HttpServletResponse response){
 		FileInfo file = fileInfoService.get(id);
-		InputStream in = hdfsService.download(file.getPathInside());
-		OutputStream os = null;
-        try {
-        	response.setCharacterEncoding("utf-8");
-            response.setContentType(file.getContentType());
-			//response.setHeader("Content-Disposition", "attachment;fileName="
-			//        + new String(file.getFileName().getBytes("utf-8"), "ISO8859-1"));
-            response.setHeader("Content-Disposition", "attachment;fileName="+file.getFileName());
-			response.setHeader("Content-Length", String.valueOf(file.getFileSize()));  
-			os = response.getOutputStream();
-			IOUtils.copyBytes(in, os, file.getFileSize(), true);
-			/*byte[] b = new byte[BUFFER_SIZE];
-            int length =  in.read(b);
-            while (length > 0) {
-                os.write(b, 0, length);
-                length =  in.read(b);
-            }*/
-			os.flush();
-		} catch (UnsupportedEncodingException e) {
-		} catch (IOException e) {
+		byte[] buffer = null;
+		if(!file.isDirectory()){
+			 buffer = hdfsService.download(file.getPathInside());
+			 OutputStream os = null;
+		        try {
+		        	response.reset();
+		        	response.setCharacterEncoding("utf-8");
+		            response.setContentType(file.getContentType());
+					response.setHeader("Content-Disposition", "attachment;fileName="
+					       + new String(file.getFileName().getBytes("utf-8"), "ISO8859-1"));
+					response.setHeader("Content-Length", String.valueOf(file.getFileSize()));  
+					os = response.getOutputStream();
+					os.write(buffer);
+					os.flush();
+				} catch (UnsupportedEncodingException e) {
+				} catch (IOException e) {
+				}
+		}else {
+			String destPath = hdfsService.downloadDir(file.getPathInside(), getCurrentUserName());
+			String filePath = destPath+"/"+file.getFileName();
+			String zipPath = "/tmp/hdfsdownload/"+getCurrentUserName()+"/pack.zip";
+			try {
+				String agent = request.getHeader("user-agent");
+				ZipUtil.zip(filePath, zipPath, null,agent);
+			} catch (Exception e) {
+			}
+			 OutputStream os = null;
+			 BufferedInputStream bis = null;
+			BufferedOutputStream bos = null;
+			File zip = new File(zipPath);
+			File src = new File(filePath);
+		        try {
+		            response.setContentType("application/octet-stream");
+					response.setHeader("Content-disposition", "attachment; filename="
+					       + new String("pack.zip".getBytes("utf-8"), "ISO8859-1"));
+					response.setHeader("Content-Length", String.valueOf(zip.length()));  
+					os = response.getOutputStream();
+					bis = new BufferedInputStream(new FileInputStream(zipPath));
+					bos = new BufferedOutputStream(os);
+					byte[] buff = new byte[BUFFER_SIZE];
+					int bytesRead;
+					while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+						bos.write(buff, 0, bytesRead);
+					}
+					bis.close();
+					bos.close();
+					os.close();
+				} catch (UnsupportedEncodingException e) {
+				} catch (IOException e) {
+				}finally{
+					deleteDir(src);
+					zip.delete();
+				}
 		}
 		return null;
 	}
+	
+	protected static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            //递归删除目录中的子目录下
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        // 目录此时为空，可以删除
+        return dir.delete();
+    }
 	
 	@RequestMapping("getNodes.do")
 	@ResponseBody

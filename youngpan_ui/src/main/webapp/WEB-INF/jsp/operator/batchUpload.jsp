@@ -18,7 +18,7 @@ $(function(){
 			fileTypeExts:'*.*',
 			multi:true,
 			formData:{id:id},
-			fileSizeLimit:104857600,
+			fileSizeLimit:1048576000,
 			showUploadedPercent:true,
 			showUploadedSize:true,
 			removeTimeout:9999999,
@@ -28,7 +28,7 @@ $(function(){
 					yp.utils.notice.info("文件大小不能超过100M","错误信息",1000);
 					var uploadItem = $("#fileupload_"+instanceNumber+"_"+file.index);
 					uploadItem.remove();
-				}
+				} 
 			},
 			onInit:function(obj){
 				instanceNumber = obj.instanceNumber;
